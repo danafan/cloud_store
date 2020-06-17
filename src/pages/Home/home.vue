@@ -1,0 +1,215 @@
+<template>
+	<div class="box">
+		<el-container style="height:100%">
+			<el-aside style="width=200px">
+				<div class="gxk">账户综合服务平台</div>
+				<el-menu
+				:default-active="activeIndex"
+				:router="true"
+				class="el-menu-vertical-demo"
+				background-color="#545c64"
+				text-color="#fff"
+				active-text-color="#fff">
+				<el-menu-item index="/index">
+					<i class="el-icon-menu"></i>
+					<span slot="title">首页</span>
+				</el-menu-item>
+				<el-submenu index="1">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>交易管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/trade_order">交易订单</el-menu-item>
+						<el-menu-item index="/receipt">电子回单</el-menu-item>
+						<el-menu-item index="/hang_order">挂起订单</el-menu-item>
+						<el-menu-item index="/batch_money">批量打款</el-menu-item>
+						<el-menu-item index="/money_record">批量打款记录</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="2">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>调单管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/single">调单记录</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+			</el-menu>
+		</el-aside>
+		<el-container>
+			<el-header class="header">
+				<div class="breadcrumb">{{crumb}}</div>
+				<div class="user_set">
+					<div class="username">范玉龙</div>
+					<div class="line"></div>
+					<div class="tui" @click="exit">退出</div>
+				</div>
+			</el-header>
+			<el-main class="main">
+				<keep-alive>
+					<router-view v-if="$route.meta.keepAlive"></router-view>
+				</keep-alive>
+				<router-view v-if="!$route.meta.keepAlive"></router-view>
+			</el-main>
+		</el-container>
+	</el-container>
+</div>
+</template>
+<style lang="less" scoped>
+.box{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	.gxk{
+		background: #00152A;
+		width: 256px;
+		height: 64px;
+		display:flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 18px;
+		color: #fff;
+	}
+	.header{
+		width: 100%;
+		height: 64px;
+		background:#fff !important;
+		display:flex;
+		align-items: center;
+		justify-content: space-between;
+		.breadcrumb{
+			font-size: 18px;
+			color: #333333;
+			font-weight:600;
+		}
+		.user_set{
+			display: flex;
+			align-items: center;
+			.username{
+				font-size: 14px;
+				color: #000000;
+			}
+			.line{
+				margin-right: 8px;
+				margin-left: 8px;
+				border-right: 1px solid #008DFF;
+				height:13px;
+			}
+			.tui{
+				font-size: 14px;
+				color: #333333;
+			}
+		}
+	}
+	.el-menu-item.is-active {
+		background:#008DFF !important;
+	}
+	.el-aside{
+		background:#00152A !important;
+	}
+	.el-menu{
+		border: none !important;	
+	}
+	.main{
+		background: #F0F2F5;
+		height: 100%;
+		overflow-y: scroll;
+	}
+}
+</style>
+<script>
+	// import resource from '../../api/resource.js'
+	export default{
+		data(){
+			return{
+				activeIndex:"",
+				admin_name:"",
+				crumb:"首页"
+			}
+		},
+		created(){
+			this.admin_name = sessionStorage.getItem("admin_name");
+			let tab = sessionStorage.getItem("tab");
+			if(!tab){
+				this.activeIndex = '/index';
+			}
+			if(tab == '/trade_order' || tab == '/order_detail'){
+				this.activeIndex = '/trade_order';
+			}else if(tab == '/money_record' || tab == '/money_detail'){
+				this.activeIndex = '/money_record';
+			}else if(tab == '/single' || tab == '/single_detail'){
+					this.activeIndex = '/single';
+				}else{
+				this.activeIndex = tab;
+			}
+			this.crumb = this.$route.name;
+		},	
+		watch:{
+			$route(n){
+				this.crumb = n.name;
+				this.handleSelect(n.path);
+			}
+		},
+		methods:{
+			handleSelect(index){
+				if(index == '/trade_order' || index == '/order_detail'){
+					this.activeIndex = '/trade_order';
+				}else if(index == '/money_record' || index == '/money_detail'){
+					this.activeIndex = '/money_record';
+				}else if(index == '/single' || index == '/single_detail'){
+					this.activeIndex = '/single';
+				}else{
+					this.activeIndex = index;
+				}
+				
+			},
+			//点击退出
+			exit(){
+				this.$confirm('确认退出当前账户?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					resource.loginOut().then(res => {
+						if(res.data.code == 1){
+							sessionStorage.clear();
+							this.$message.success(res.data.msg);
+							this.$router.push('/login');
+						}else{
+							this.$message.warning(res.data.msg);
+						}
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '取消退出'
+					});          
+				});
+			}
+		}
+	}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
