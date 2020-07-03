@@ -2,7 +2,10 @@ import axios from './index'
 
 export default {
   post(path, params={}){
-    var target = {};
+    var target = {
+      admin_id:"1",
+      store:"1"
+    };
 
     Object.assign(params, target);
     let form = new FormData();
@@ -20,7 +23,10 @@ export default {
     return axios.post(`${path}`, form);
   },
   get(path, params={}){
-    var target = {};
+    var target = {
+      admin_id:"1",
+       store:"1"
+    };
     
     Object.assign(params, target);
     let arr = [];

@@ -11,7 +11,7 @@
 			<el-form :inline="true" size="small" class="demo-form-inline">
 				<el-form-item label="创建时间：">
 					<el-date-picker
-					v-model="order_create_date"
+					v-model="date"
 					type="datetimerange"
 					value-format="yyyy-MM-dd HH:mm:ss"
 					range-separator="至"
@@ -48,34 +48,38 @@
 			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
-		<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column width="150" prop="shop_num" label="调单流水号" align="center">
+		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+			<el-table-column width="150" prop="adjust_id" label="调单流水号" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="创建时间" align="center">
+			<el-table-column width="150" prop="created_time" label="创建时间" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="风险点" align="center">
+			<el-table-column width="150" prop="risk_name" label="风险点" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="调单说明" align="center">
+			<el-table-column width="150" prop="risk_desc" label="调单说明" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="订单数量" align="center">
+			<el-table-column width="150" prop="order_id" label="平台订单号" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="平台订单号" align="center">
+			<el-table-column width="150" prop="name" label="收款户名" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="收款户名" align="center">
+			<el-table-column width="150" prop="feedback_time" label="反馈时间" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="反馈时间" align="center">
+			<el-table-column width="150" label="状态" align="center">
+				<template slot-scope="scope">
+					<span>{{feedback_status | feedback}}</span>
+				</template>
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="状态" align="center">
+			<el-table-column width="150" prop="feedback_end_time" label="距离反馈截止日" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="距离反馈截止日" align="center">
+			<el-table-column width="150" label="审核结论" align="center">
+				<template slot-scope="scope">
+					<span>{{audit_status | audit}}</span>
+				</template>
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="审核结论" align="center">
-			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="审核结论说明" align="center">
+			<el-table-column width="150" prop="audit_desc" label="审核结论说明" align="center">
 			</el-table-column>
 			<el-table-column fixed="right" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="setting">取消打款</el-button>
+					<el-button type="text" size="small" @click="getDetail(scope.row.adjust_id)">详情</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -106,6 +110,7 @@
 }
 </style>
 <script>
+	import resource from '../../api/resource.js'
 	export default{
 		data(){
 			return{
@@ -151,18 +156,14 @@
 					id:"3",
 					name:"风险存疑"
 				}],					//订单状态
-				order_create_date:[],	//订单创建时间
-				dataObj:{
-					order_list:[{
-						shop_num:"哈哈哈"
-					}],			//订单列表
-					total:100
-				},	
+				date:[],	//订单创建时间
+				dataObj:{},	
 				
 			}
 		},
 		created(){
-			
+			//获取列表
+			this.getList();
 		},
 		watch:{
 			//订单创建时间
@@ -172,9 +173,21 @@
 			}
 		},
 		methods:{
+			//获取列表
+			getList(){
+				resource.adjustList(this.req).then(res => {
+					if(res.data.code == 1){
+						//获取列表
+						this.dataObj = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				});
+			},
 			//搜索
 			search(){
-				console.log(this.req);
+				//获取列表
+				this.getList()
 			},
 			//导出
 			exportFile(){
@@ -182,6 +195,7 @@
 			},
 			//重置
 			reset(){
+				this.date = [];
 				this.req = {
 					page:1,
 					pagesize:10,
@@ -206,9 +220,33 @@
 				this.getList();
 			},
 			//操作
-			setting(){
-				this.$router.push("/single_detail");
+			getDetail(id){
+				this.$router.push("/single_detail?adjust_id = " + id);
 			}
+		},
+		filters:{
+			feedback:function(v){
+				switch(v){
+					case 0:
+					return '待反馈'
+					case 1:
+					return '待审核'
+					case 2:
+					return '已完成'
+				}
+			},
+			audit:function(v){
+				switch(v){
+					case 0:
+					return '未审核'
+					case 1:
+					return '风险成立'
+					case 2:
+					return '风险排除'
+					case 3:
+					return '风险存疑'
+				}
+			},
 		}
 	}
 </script>

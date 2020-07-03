@@ -36,6 +36,95 @@
 						<el-menu-item index="/single">调单记录</el-menu-item>
 					</el-menu-item-group>
 				</el-submenu>
+				<el-submenu index="3">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>资金管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/account_management">账户管理</el-menu-item>
+						<el-menu-item index="/money_dis">资金流水</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="4">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>账单管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/bill_list">余额日账单</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="5">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>发票管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/apply">发票申请</el-menu-item>
+						<el-menu-item index="/apply_record">申请记录</el-menu-item>
+						<el-menu-item index="/has_invoice">已开发票</el-menu-item>
+						<el-menu-item index="/invoice_info">开票信息</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="6">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>用户管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/sign_user">签约用户</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="7">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>商户管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/store_info">商户信息</el-menu-item>
+						<el-menu-item index="/sign_info">签约信息</el-menu-item>
+						<el-menu-item index="/docking_info">对接信息</el-menu-item>
+						<el-menu-item index="/remind_setting">提醒设置</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="8">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>数据管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/data_management">商户数据</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="9">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>消息管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/correspondence">函件通知</el-menu-item>
+						<el-menu-item index="/system">系统公告</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="10">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>税务管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/buckle_pay">个税扣缴明细</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="11">
+					<template slot="title">
+						<i class="el-icon-menu"></i>
+						<span>权限管理</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="/account_pre">账号管理</el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
 			</el-menu>
 		</el-aside>
 		<el-container>
@@ -142,8 +231,10 @@
 			}else if(tab == '/money_record' || tab == '/money_detail'){
 				this.activeIndex = '/money_record';
 			}else if(tab == '/single' || tab == '/single_detail'){
-					this.activeIndex = '/single';
-				}else{
+				this.activeIndex = '/single';
+			}else if(tab == '/money_record' || tab == '/money_detail'){
+				this.activeIndex = '/money_record';
+			}else{
 				this.activeIndex = tab;
 			}
 			this.crumb = this.$route.name;
@@ -162,6 +253,8 @@
 					this.activeIndex = '/money_record';
 				}else if(index == '/single' || index == '/single_detail'){
 					this.activeIndex = '/single';
+				}else if(index == '/money_record' || index == '/money_detail'){
+					this.activeIndex = '/money_record';
 				}else{
 					this.activeIndex = index;
 				}

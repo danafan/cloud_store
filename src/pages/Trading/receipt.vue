@@ -18,48 +18,51 @@
 					<el-input v-model="req.batch_no" placeholder="请输入"></el-input>
 				</el-form-item>
 				<el-form-item label="回单状态：">
-					<el-select v-model="req.receipt_status" placeholder="不限" clearable>
+					<el-select v-model="req.receipt_status" clearable>
 						<el-option v-for="item in receipt_list" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
 				</el-form-item>
-			<el-form-item label="订单完成时间：">
-				<el-date-picker
-				v-model="date"
-				type="datetimerange"
-				value-format="yyyy-MM-dd HH:mm:ss"
-				range-separator="至"
-				start-placeholder="开始时间"
-				end-placeholder="结束时间"
-				:default-time="['00:00:00', '23:59:59']">
-			</el-date-picker>
-		</el-form-item>
-	</el-form>
-	<div class="but">
-		<el-button type="primary" size="small" @click="search">搜索</el-button>
-		<el-button type="primary" size="small" @click="exportFile">导出</el-button>
-		<el-button type="primary" size="small" @click="reset">重置</el-button>
-	</div>
-	<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column width="150" prop="shop_num" label="订单完成时间" align="center">
+				<el-form-item label="订单完成时间：">
+					<el-date-picker
+					v-model="date"
+					type="datetimerange"
+					value-format="yyyy-MM-dd HH:mm:ss"
+					range-separator="至"
+					start-placeholder="开始时间"
+					end-placeholder="结束时间"
+					:default-time="['00:00:00', '23:59:59']">
+				</el-date-picker>
+			</el-form-item>
+		</el-form>
+		<div class="but">
+			<el-button type="primary" size="small" @click="search">搜索</el-button>
+			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
+			<el-button type="primary" size="small" @click="reset">重置</el-button>
+		</div>
+		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+			<el-table-column width="150" prop="finished_time" label="订单完成时间" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="批次号" align="center">
+			<el-table-column width="150" prop="batch_no" label="批次号" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="平台订单号" align="center">
+			<el-table-column width="150" prop="order_id" label="平台订单号" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="商户订单号" align="center">
+			<el-table-column width="150" prop="sorder_sn" label="商户订单号" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="回单名称" align="center">
+			<el-table-column width="150" prop="receipt_name" label="回单名称" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="打款通道" align="center">
+			<el-table-column width="150" prop="pay_method" label="打款通道" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="用户收款金额（元）" align="center">
+			<el-table-column width="150" prop="receive_money" label="用户收款金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="收款户名" align="center">
+			<el-table-column width="150" prop="name" label="收款户名" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="收款账号" align="center">
+			<el-table-column width="150" prop="bank_card_no" label="收款账号" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="状态" align="center">
+			<el-table-column width="150" label="状态" align="center">
+				<template slot-scope="scope">
+					<span>{{scope.row.receipt_status == 0 ? '待处理' : '已完成'}}</span>
+				</template>
 			</el-table-column>
 			<el-table-column fixed="right" label="操作" align="center">
 				<template slot-scope="scope">
@@ -86,6 +89,7 @@
 
 </style>
 <script>
+	import resource from '../../api/resource.js'
 	export default{
 		data(){
 			return{
@@ -97,7 +101,7 @@
 					bank_card_no:"",
 					name:"",
 					batch_no:"",
-					receipt_status:"",
+					receipt_status:"-1",
 					finished_time_start:"",
 					finished_time_end:"",
 				},				//请求参数
@@ -112,18 +116,14 @@
 					id:"1",
 					name:"已完成"
 				}],
-				date:[],	//订单创建时间
-				dataObj:{
-					order_list:[{
-						shop_num:"哈哈哈"
-					}],			//订单列表
-					total:100
-				},	
+				date:[],	//订单完成时间
+				dataObj:{},	
 				
 			}
 		},
 		created(){
-			
+			//获取列表
+			this.getList();
 		},
 		watch:{
 			//订单完成时间
@@ -133,6 +133,16 @@
 			}
 		},
 		methods:{
+			//获取列表
+			getList(){
+				resource.receiptList(this.req).then(res => {
+					if(res.data.code == 1){
+						this.dataObj = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			},
 			//搜索
 			search(){
 				console.log(this.req);
