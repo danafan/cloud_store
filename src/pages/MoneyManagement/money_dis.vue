@@ -14,19 +14,19 @@
 				</el-date-picker>
 			</el-form-item>
 			<el-form-item label="资金流水号：">
-				<el-input v-model="req.money_record_num" placeholder="请输入"></el-input>
+				<el-input v-model="req.bill_id" placeholder="请输入"></el-input>
 			</el-form-item>
 			<el-form-item label="商户订单号：">
-				<el-input v-model="req.store_order_num" placeholder="请输入"></el-input>
+				<el-input v-model="req.sorder_sn" placeholder="请输入"></el-input>
 			</el-form-item>
 			<el-form-item label="业务类型：">
-				<el-select v-model="req.top_up_type" placeholder="不限" clearable>
+				<el-select v-model="req.business_type" placeholder="不限" clearable>
 					<el-option v-for="item in top_up_type" :key="item.id" :label="item.name" :value="item.id">
 					</el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item label="收支类型：">
-				<el-select v-model="req.money_use" placeholder="不限" clearable>
+				<el-select v-model="req.io_type" placeholder="不限" clearable>
 					<el-option v-for="item in money_use_list" :key="item.id" :label="item.name" :value="item.id">
 					</el-option>
 				</el-select>
@@ -37,28 +37,28 @@
 			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
-		<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column prop="shop_num" label="入账时间" align="center">
+		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+			<el-table-column prop="finished_time" label="入账时间" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="商户ID" align="center">
+			<el-table-column prop="store_id" label="商户ID" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="综合服务主体" align="center">
+			<el-table-column prop="service_subject_name" label="综合服务主体" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="平台订单号" align="center">
+			<el-table-column prop="order_id" label="平台订单号" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="商户订单号" align="center">
+			<el-table-column prop="sorder_sn" label="商户订单号" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="资金流水号" align="center">
+			<el-table-column prop="bill_id" label="资金流水号" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="业务类型" align="center">
+			<el-table-column prop="business_type1" label="业务类型" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="业务子类" align="center">
+			<el-table-column prop="business_type2" label="业务子类" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="收支类型" align="center">
+			<el-table-column prop="io_type" label="收支类型" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="入账金额（元）" align="center">
+			<el-table-column prop="money" label="入账金额（元）" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="账户余额（元）" align="center">
+			<el-table-column prop="balance" label="账户余额（元）" align="center">
 			</el-table-column>
 		</el-table>
 		<div class="page">
@@ -80,18 +80,19 @@
 
 </style>
 <script>
+	import resource from '../../api/resource.js'
 	export default{
 		data(){
 			return{
 				req:{
 					page:1,
 					pagesize:10,
-					created_time_start:"",
-					created_time_end:"",
-					money_record_num:"",
-					store_order_num:"",
-					top_up_type:"0",
-					money_use:"0"
+					finished_time_start:"",
+					finished_time_start:"",
+					bill_id:"",
+					sorder_sn:"",
+					business_type:"0",
+					io_type:"0"
 				},				//请求参数
 				date:[],		//入账时间
 				top_up_type:[{
@@ -99,27 +100,24 @@
 					name:"不限"
 				},{
 					id:"1",
-					name:"提现"
-				},{
-					id:"2",
-					name:"要素认证"
-				},{
-					id:"3",
 					name:"充值"
 				},{
-					id:"4",
+					id:"2",
+					name:"提现"
+				},{
+					id:"3",
 					name:"打款"
 				},{
+					id:"4",
+					name:"系统返点"
+				},{
 					id:"5",
-					name:"系统打款"
-				},{
-					id:"6",
-					name:"提现撤回"
-				},{
-					id:"7",
 					name:"转账"
 				},{
-					id:"8",
+					id:"6",
+					name:"提现取消"
+				},{
+					id:"7",
 					name:"打款退款"
 				}],	//充值类型
 				money_use_list:[{
@@ -132,26 +130,33 @@
 					id:"2",
 					name:"支出"
 				}],	//资金用途
-				dataObj:{
-					order_list:[{
-						shop_num:"哈哈哈"
-					}],			//订单列表
-					total:100
-				},	
+				dataObj:{},	
 				
 			}
 		},
 		created(){
-			
+			//获取列表
+			this.getList();
 		},
 		watch:{
 			//入账时间
 			date:function(n){
-				this.req.created_time_start = n?n[0]:"";
-				this.req.created_time_end = n?n[1]:"";
+				this.req.finished_time_start = n?n[0]:"";
+					finished_time_start:"",
+				this.req.finished_time_end = n?n[1]:"";
 			}
 		},
 		methods:{
+			//获取列表
+			getList(){
+				resource.accountChange(this.req).then(res => {
+					if(res.data.code == 1){
+						this.dataObj = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			},
 			//搜索
 			search(){
 				console.log(this.req);
@@ -165,12 +170,12 @@
 				this.req = {
 					page:1,
 					pagesize:10,
-					created_time_start:"",
-					created_time_end:"",
-					money_record_num:"",
-					store_order_num:"",
-					top_up_type:"0",
-					money_use:"0"
+					finished_time_start:"",
+					finished_time_end:"",
+					bill_id:"",
+					sorder_sn:"",
+					business_type:"0",
+					io_type:"0"
 				}
 			},
 			//分页

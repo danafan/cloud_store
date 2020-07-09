@@ -26,25 +26,25 @@
 			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
-		<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column width="150" prop="shop_num" label="发票申请编号" align="center">
+		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+			<el-table-column width="150" prop="apply_id" label="发票申请编号" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="已申请发票（张）" align="center">
+			<el-table-column width="150" prop="invoice_num" label="已申请发票（张）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="价税合计总额（元）" align="center">
+			<el-table-column width="150" prop="total_price_tax" label="价税合计总额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="发票申请时间" align="center">
+			<el-table-column width="150" prop="add_time" label="发票申请时间" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="状态" align="center">
+			<el-table-column width="150" prop="status" label="状态" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="发票抬头" align="center">
+			<el-table-column width="150" prop="drawer" label="发票抬头" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="开票方" align="center">
+			<el-table-column width="150" prop="invoice_title" label="开票方" align="center">
 			</el-table-column>
 			<el-table-column fixed="right" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="detail">查看</el-button>
-					<el-button type="text" size="small" @click="downDetail">结算确认函</el-button>
+					<el-button type="text" size="small" @click="applyDetail(scope.row.apply_id)">查看</el-button>
+					<el-button type="text" size="small" @click="downDetail(scope.row.apply_id)" v-if="scope.row.is_confirmation_letter == 1">结算确认函</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -68,73 +68,56 @@
 			<div class="apply_item">
 				<div class="apply_item_title">发票详情（已申请结算确认函）<span>已寄出</span></div>
 				<div class="apply_item_content">
-					<div class="content_item">发票申请编号：12312313</div>
-					<div class="content_item">待申请发票（张）：12</div>
-					<div class="content_item">价税合计总额（元）：1231.00</div>
+					<div class="content_item">发票申请编号：{{apply_info.apply_id}}</div>
+					<div class="content_item">待申请发票（张）：{{apply_info.invoice_num}}</div>
+					<div class="content_item">价税合计总额（元）：{{apply_info.total_price_tax}}</div>
 				</div>
 			</div>
 			<div class="apply_item">
 				<div class="apply_item_title">商户信息</div>
 				<div class="apply_item_content">
-					<div class="content_item">商户别名：xxxxx公司</div>
-					<div class="content_item">纳税人类型：一般纳税人</div>
+					<div class="content_item">商户别名：{{store_info.store_name}}</div>
+					<div class="content_item">纳税人类型：{{store_info.taxpayer_type_name}}</div>
 				</div>
 			</div>
 			<div class="apply_item">
 				<div class="apply_item_title">邮寄地址</div>
 				<div class="hy">
-					<div class="content_item">收件人姓名：小王</div>
-					<div class="content_item">收件人电话：1123123123123</div>
-					<div class="content_item">收件人地址：浙江省杭州市萧山区</div>
+					<div class="content_item">收件人姓名：{{store_info.recieve_user}}</div>
+					<div class="content_item">收件人电话：{{store_info.recieve_phone}}</div>
+					<div class="content_item">收件人地址：{{store_info.recieve_address}}</div>
 				</div>
 			</div>
 			<div class="apply_item">
 				<div class="apply_item_title">开票说明</div>
 				<div class="hy">
-					<div class="content_item">这是开票说明</div>
+					<div class="content_item">{{apply_info.remarks}}</div>
 				</div>
 			</div>
 		</el-tab-pane>
 		<el-tab-pane label="账单" name="bill">
-			<div v-if="bill_type == '1'">
+			<div>
 				<div class="bill_title">
 					申请开票总金额：¥2000000
 				</div>
-				<el-table :data="bill_apply" size="small" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-					<el-table-column prop="shop_num" label="流水号" align="center">
+				<el-table :data="bill_list" size="small" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+					<el-table-column prop="bill_id" label="账单编号" align="center">
 					</el-table-column>
-					<el-table-column prop="shop_num" label="账单类型" align="center">
+					<el-table-column prop="type" label="账单类型" align="center">
 					</el-table-column>
-					<el-table-column prop="shop_num" label="金额（元）" align="center">
+					<el-table-column prop="biil_money" label="金额（元）" align="center">
 					</el-table-column>
-					<el-table-column prop="shop_num" label="日期" align="center">
+					<el-table-column prop="bill_date" label="日期" align="center">
 					</el-table-column>
-					<el-table-column prop="shop_num" label="申请开票金额（元）" align="center">
-					</el-table-column>
-				</el-table>
-			</div>
-			<div v-if="bill_type == '2'">
-				<div class="bill_title">
-					申请开票总金额：¥2000000
-				</div>
-				<el-table :data="bill_apply" size="small" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-					<el-table-column prop="shop_num" label="账单编号" align="center">
-					</el-table-column>
-					<el-table-column prop="shop_num" label="账单类型" align="center">
-					</el-table-column>
-					<el-table-column prop="shop_num" label="账单金额（元）" align="center">
-					</el-table-column>
-					<el-table-column prop="shop_num" label="账单完成日期" align="center">
-					</el-table-column>
-					<el-table-column prop="shop_num" label="账单申请开票金额（元）" align="center">
+					<el-table-column prop="biil_money" label="申请开票金额（元）" align="center">
 					</el-table-column>
 				</el-table>
 			</div>
 		</el-tab-pane>
 		<el-tab-pane label="发票预览" name="invoice_show">
 			<el-carousel :interval="5000" arrow="always">
-				<el-carousel-item v-for="item in 4" :key="item">
-					<h3>{{ item }}</h3>
+				<el-carousel-item v-for="item in pic_list" :key="item">
+					<img :src="item">
 				</el-carousel-item>
 			</el-carousel>
 			<div class="bottom_buts">
@@ -220,6 +203,7 @@
 }
 </style>
 <script>
+	import resource from '../../api/resource.js'
 	export default{
 		data(){
 			return{
@@ -231,13 +215,12 @@
 					apply_id:""
 				},				//请求参数
 				date:[],	//订单创建时间
-				dataObj:{
-					order_list:[{
-						shop_num:"哈哈哈"
-					}],			//订单列表
-					total:100
-				},	
+				dataObj:{},	
 				isDetail:false,		//默认详情不显示
+				apply_info:{},
+				store_info:{},
+				bill_list:[],
+				pic_list:[],
 				activeName:"apply_detail",
 				bill_type:"1",			//1:充值，2:打款
 				bill_apply:[{
@@ -250,7 +233,8 @@
 			}
 		},
 		created(){
-			
+			//获取列表
+			this.applyList();
 		},
 		watch:{
 			//订单创建时间
@@ -260,6 +244,30 @@
 			}
 		},
 		methods:{
+			//获取列表
+			applyList(){
+				resource.applyList(this.req).then(res => {
+					if(res.data.code == 1){
+						this.dataObj = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			},
+			//获取详情
+			applyDetail(id){
+				resource.applyDetail({apply_id:id}).then(res => {
+					if(res.data.code == 1){
+						this.isDetail = true;
+						this.apply_info = res.data.data.apply_info;
+						this.store_info = res.data.data.store_info;
+						this.bill_list = res.data.data.bill_list;
+						this.pic_list = res.data.data.pic_list;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			},
 			//搜索
 			search(){
 				console.log(this.req);
@@ -270,6 +278,7 @@
 			},
 			//重置
 			reset(){
+				this.date = [];
 				this.req = {
 					page:1,
 					pagesize:10,
@@ -289,13 +298,15 @@
 				//获取列表
 				this.getList();
 			},
-			//查看
-			detail(){
-				this.isDetail = true;
-			},
 			//结算确认函
-			downDetail(){
-				console.log("结算确认函")
+			downDetail(id){
+				resource.invoiceConfirm({apply_id:id}).then(res => {
+					if(res.data.code == 1){
+						
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
 			},
 			//切换详情弹框导航
 			handleClick(tab) {

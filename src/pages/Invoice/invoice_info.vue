@@ -9,17 +9,17 @@
 				</div>
 			</div>
 			<div class="info_row">
-				<div>企业名称：xxx公司</div>
-				<div>纳税人识别号：12364721634</div>
+				<div>企业名称：{{invoiceInfo.enterprise_name}}</div>
+				<div>纳税人识别号：{{invoiceInfo.taxpayer_id}}</div>
 			</div>
 			<div class="info_row">
-				<div>纳税人类型：一般纳税人</div>
-				<div>单位注册地址及电话：杭州市萧山区</div>
+				<div>纳税人类型：{{invoiceInfo.taxpayer_type}}</div>
+				<div>单位注册地址及电话：{{invoiceInfo.address_phone}}</div>
 			</div>
-			<div class="info_row">发票类目：*现代服务*营销服务费   *现代服务*推广服务费    *现代服务*信息服务费</div>
+			<div class="info_row">发票类目：{{invoiceInfo.cate_ids}}</div>
 			<div class="info_row">
-				<div>开户行及账号：台州银行杭州西湖支行 11111111122222222</div>
-				<div>默认发票类目：*现代服务*营销服务费</div>
+				<div>开户行及账号：{{invoiceInfo.bank_info}}</div>
+				<div>默认发票类目：{{invoiceInfo.default_cate_id}}</div>
 			</div>
 		</el-card>
 		<el-card style="margin-top: 24px;">
@@ -30,36 +30,39 @@
 					<div class="edit_txt">编辑</div>
 				</div>
 			</div>
-			<div class="info_row">收件人姓名：小王</div>
-			<div class="info_row">收件人电话：1388888888</div>
-			<div class="info_row">收件人地址：浙江省杭州市萧山区XXXXXXXX</div>
+			<div class="info_row">收件人姓名：{{invoiceInfo.recieve_user}}</div>
+			<div class="info_row">收件人电话：{{invoiceInfo.recieve_phone}}</div>
+			<div class="info_row">收件人地址：{{invoiceInfo.recieve_address}}</div>
 		</el-card>
 		<!-- 编辑开票信息 -->
 		<el-dialog title="编辑开票信息" :visible.sync="showApply">
 			<el-form size="small" style="width: 60%;margin: 0 auto">
 				<el-form-item label="企业名称" label-width="130px" required>
-					<el-input v-model="applyInfo.store_id"></el-input>
+					<el-input v-model="applyInfo.enterprise_name" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="纳税人识别号" label-width="130px" required>
-					<el-input v-model="applyInfo.taxpayer_id"></el-input>
+					<el-input v-model="applyInfo.taxpayer_id" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="纳税人类型" label-width="130px" required>
-					<el-radio-group v-model="applyInfo.taxpayer_type">
-						<el-radio label="1">一般纳税人</el-radio>
-						<el-radio label="2">小规模纳税人</el-radio>
+					<el-radio-group v-model="applyInfo.taxpayer_type" :disabled="true">
+						<el-radio :label="1">一般纳税人</el-radio>
+						<el-radio :label="2">小规模纳税人</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="单位注册及地址" label-width="130px" required>
-					<el-input v-model="applyInfo.address_phone"></el-input>
+					<el-input v-model="applyInfo.address_phone" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="开户行及帐号" label-width="130px" required>
-					<el-input v-model="applyInfo.bank_info"></el-input>
+					<el-input v-model="applyInfo.bank_info" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="发票类目" label-width="130px" required>
-					<el-input v-model="applyInfo.default_cate_id"></el-input>
+					<el-input v-model="applyInfo.cate_ids" :disabled="true"></el-input>
 				</el-form-item>
-				<el-form-item label="默认发票类目" label-width="130px" required>
-					<el-input v-model="applyInfo.default_cate_id"></el-input>
+				<el-form-item label="默认发票类目：">
+					<el-select v-model="applyInfo.default_cate_id">
+						<el-option v-for="item in applyInfo.cate_list" :key="item.invoice_cate_id" :label="item.cate_name" :value="item.invoice_cate_id">
+						</el-option>
+					</el-select>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -71,18 +74,18 @@
 		<el-dialog title="编辑邮寄地址" :visible.sync="showAddress">
 			<el-form size="small" style="width: 60%;margin: 0 auto">
 				<el-form-item label="收件人姓名" label-width="130px" required>
-					<el-input v-model="addressInfo.recieve_user"></el-input>
+					<el-input v-model="applyInfo.recieve_user"></el-input>
 				</el-form-item>
 				<el-form-item label="收件人电话" label-width="130px" required>
-					<el-input v-model="addressInfo.recieve_phone"></el-input>
+					<el-input v-model="applyInfo.recieve_phone"></el-input>
 				</el-form-item>
 				<el-form-item label="收件人地址" label-width="130px" required>
-					<el-input v-model="addressInfo.recieve_address"></el-input>
+					<el-input v-model="applyInfo.recieve_address"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="showAddress = false">取 消</el-button>
-				<el-button type="primary" @click="submitEditAddress">确 定</el-button>
+				<el-button type="primary" @click="submitEditApply">确 定</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -124,43 +127,88 @@
 }
 </style>
 <script>
+	import resource from '../../api/resource.js'
 	export default{
 		data(){
 			return{
+				invoiceInfo:{},
+				type:1,					//弹框类型
 				showApply:false,		//编辑开票信息弹框
-				applyInfo:{
-					store_id:"",
-					taxpayer_id:"",
-					taxpayer_type:"2",
-					address_phone:"",
-					bank_info:"",
-					default_cate_id:"",
-
-				},						//编辑开票信息内容
+				applyInfo:{},			//获取的编辑开票信息内容
 				showAddress:false,		//编辑邮寄地址弹框
-				addressInfo:{
-					recieve_user:"",
-					recieve_phone:"",
-					recieve_address:"",
-				},						//编辑邮寄地址内容
 			}
 		},
+		created(){
+			//获取开票信息
+			this.getInvoiceInfo();
+		},
 		methods:{
-			//编辑开票信息
-			editApply(){
-				this.showApply = true;
+			//获取开票信息
+			getInvoiceInfo(){
+				resource.invoiceInfo().then(res => {
+					if(res.data.code == 1){
+						this.invoiceInfo = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
 			},
-			//点击确定提交编辑开票信息
-			submitEditApply(){
-				console.log(this.applyInfo);
+			//点击编辑开票信息
+			editApply(){
+				resource.getEditInvoiceInfo().then(res => {
+					if(res.data.code == 1){
+						this.showApply = true;
+						this.type = 1;
+						this.applyInfo = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
 			},
 			//编辑邮寄地址
 			editAddress(){
-				this.showAddress = true;
+				resource.getEditInvoiceInfo().then(res => {
+					if(res.data.code == 1){
+						this.showAddress = true;
+						this.type = 2;
+						this.applyInfo = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
 			},
-			//点击确定提交邮寄地址信息
-			submitEditAddress(){
-				console.log(this.addressInfo);
+			//点击确定提交编辑开票信息
+			submitEditApply(){
+				let req = {
+					type:this.type
+				};
+				if(this.type == 1){
+					req.default_cate_id = this.applyInfo.default_cate_id;
+				}else{
+					if(this.applyInfo.recieve_user == ''){
+						this.$message.warning("请输入收件人姓名");
+					}else if(this.applyInfo.recieve_phone == ''){
+						this.$message.warning("请输入收件人手机号");
+					}else if(this.applyInfo.recieve_address == ''){
+						this.$message.warning("请输入收件人地址");
+					}else{
+						req.recieve_user = this.applyInfo.recieve_user;
+						req.recieve_phone = this.applyInfo.recieve_phone;
+						req.recieve_address = this.applyInfo.recieve_address;
+					}
+					
+				}
+				resource.postEditInvoiceInfo(req).then(res => {
+					if(res.data.code == 1){
+						this.showApply = false;
+						this.showAddress = false;
+						this.$message.success(res.data.msg);
+						//获取开票信息
+						this.getInvoiceInfo();
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
 			}
 		}
 	}

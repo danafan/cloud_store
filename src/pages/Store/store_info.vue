@@ -5,12 +5,12 @@
 				<div class="title_txt">基本信息</div>
 			</div>
 			<div class="info_row">
-				<div class="row_item">企业名称：xxx公司</div>
-				<div class="row_item">营业执照注册号：12364721634</div>
+				<div class="row_item">企业名称：{{storeInfoObj.enterprise_name}}</div>
+				<div class="row_item">营业执照注册号：{{storeInfoObj.business_license_sn}}</div>
 			</div>
 			<div class="info_row">
-				<div class="row_item">商户名称：等哈到家</div>
-				<div class="row_item">商户ID：123123</div>
+				<div class="row_item">商户名称：{{storeInfoObj.store_name}}</div>
+				<div class="row_item">商户ID：{{storeInfoObj.store_sn}}</div>
 			</div>
 			<div class="info_row">
 				<div class="row_item">
@@ -25,12 +25,12 @@
 				<div class="title_txt">联系信息</div>
 			</div>
 			<div class="info_row">
-				<div class="row_item">联系人姓名：小王</div>
-				<div class="row_item">联系人手机号：12364721634</div>
+				<div class="row_item">联系人姓名：{{storeInfoObj.contacts_name}}</div>
+				<div class="row_item">联系人手机号：{{storeInfoObj.contacts_phone}}</div>
 			</div>
 			<div class="info_row">
-				<div class="row_item">联系人邮箱：1231312@qq.com</div>
-				<div class="row_item">联系地址：撒打算</div>
+				<div class="row_item">联系人邮箱：{{storeInfoObj.contacts_email}}</div>
+				<div class="row_item">联系地址：{{storeInfoObj.contacts_address}}</div>
 			</div>
 		</el-card>
 		<el-card style="margin-top: 24px;">
@@ -38,11 +38,11 @@
 				<div class="title_txt">结算信息</div>
 			</div>
 			<div class="info_row">
-				<div class="row_item">开户名称：撒大咖有限公司</div>
-				<div class="row_item">对公账号：12364721634</div>
+				<div class="row_item">开户名称：{{storeInfoObj.service_subject_name}}</div>
+				<div class="row_item">对公账号：{{storeInfoObj.open_bank_account}}</div>
 			</div>
 			<div class="info_row">
-				开户银行：卡上打卡机的哈快结束的支行
+				开户银行：{{storeInfoObj.open_bank_name}}
 			</div>
 		</el-card>
 		<el-card style="margin-top: 24px;">
@@ -50,11 +50,11 @@
 				<div class="title_txt">客户支持</div>
 			</div>
 			<div class="info_row">
-				<div class="row_item">客户经理：小王</div>
-				<div class="row_item">手机号：12364721634</div>
+				<div class="row_item">客户经理：{{storeInfoObj.account_manager_name}}</div>
+				<div class="row_item">手机号：{{storeInfoObj.account_manager_phone}}</div>
 			</div>
 			<div class="info_row">
-				邮箱：2312313
+				邮箱：{{storeInfoObj.account_manager_email}}
 			</div>
 		</el-card>
 	</div>
@@ -97,7 +97,53 @@
 }
 </style>
 <script>
+	import resource from '../../api/resource.js'
 	export default{
-
+		data(){
+			return{
+				storeInfoObj:{}
+			}
+		},
+		created(){
+			//获取信息
+			this.storeInfo();
+		},
+		methods:{
+			//获取信息
+			storeInfo(){
+				resource.storeInfo().then(res => {
+					if(res.data.code == 1){
+						this.storeInfoObj = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			}
+		}
 	}
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

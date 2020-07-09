@@ -26,6 +26,32 @@ let path = {
 	storeInfo:'store/storeinfo',								//商铺信息
 	rechargeRecord:'storebill/rechargerecord',					//充值记录
 	transFerrecord:'storebill/transferrecord',					//转账付款、转账收款账户
+	transfer:'storebill/transfer',								//转账
+	serviceChargeRecord:'storebill/servicechargerecord',		//服务费记录
+	accountChange:'storebill/accountchange',					//资金流水
+	daybillIndex:'daybill/index',								//余额日账单表
+	billOrderList:'daybill/orderlist',							//余额日账单详情
+	getBillInfo:'daybill/getinfo',								//余额日账单详情（顶部）
+	billlist:'invoice/billlist',								//发票申请账单列表
+	applyList:'invoice/applylist',								//发票申请记录
+	applyDetail:'invoice/applydetail',							//发票详情
+	invoiceConfirm:'invoice/confirm',							//生成确认函
+	invoiceList:'invoice/list',									//已开发票列表
+	invoiceInfo:'invoice/invoiceinfo',							//商户开票信息
+	editInvoiceInfo:'invoice/editinvoiceinfo',					//修改商户信息（获取和修改）
+	invitationSignList:'user/invitationsignlist',				//签约用户列表
+	getInfo:'user/getinfo',										//获取签约用户信息
+	editInfo:'user/editinfo',									//修改用户信息
+	userDownLoad:'user/download',								//下载签约用户模版
+	userUpload:'user/upload',									//上传邀请签约的用户	
+	storeSub:'store/storesub',									//商户签约信息
+	storeRemind:'store/storeremind',							//商户提醒设置信息
+	statistics:'daybill/statistics',							//商户数据
+	taxIndex:'tax/index',										//个税扣缴明细
+	taxDownload:'tax/download',									//下载个税明细
+	invoiceStep1:'invoice/step1',								//申请发票第一步
+	imageShow:'invoice/imageshow',								//生成图片预览
+	step2Invoice:'invoice/step2',								//申请发票第二步
 
 }				
 export default{
@@ -132,6 +158,114 @@ export default{
 	//转账付款、转账收款账户
 	transFerrecord(params){
 		return http.get(path.transFerrecord, params)
+	},
+	//转账
+	transfer(params){
+		return http.post(path.transfer, params)
+	},
+	//服务费记录
+	serviceChargeRecord(params){
+		return http.get(path.serviceChargeRecord, params)
+	},
+	//资金流水
+	accountChange(params){
+		return http.get(path.accountChange, params)
+	},
+	//余额日账单列表
+	daybillIndex(params){
+		return http.get(path.daybillIndex, params)
+	},
+	//余额日账单详情
+	billOrderList(params){
+		return http.get(path.billOrderList, params)
+	},
+	//余额日账单详情（顶部）
+	getBillInfo(params){
+		return http.get(path.getBillInfo, params)
+	},
+	//发票申请账单列表
+	billlist(params){
+		return http.get(path.billlist, params)
+	},
+	//发票申请记录
+	applyList(params){
+		return http.get(path.applyList, params)
+	},
+	//获取发票详情
+	applyDetail(params){
+		return http.get(path.applyDetail, params)
+	},
+	//生成确认函
+	invoiceConfirm(params){
+		return http.get(path.invoiceConfirm, params)
+	},
+	//已开发票列表
+	invoiceList(params){
+		return http.get(path.invoiceList, params)
+	},
+	//还是那个户开票信息
+	invoiceInfo(params){
+		return http.get(path.invoiceInfo, params)
+	},
+	//编辑商户信息（获取信息）
+	getEditInvoiceInfo(params){
+		return http.get(path.editInvoiceInfo, params)
+	},
+	//编辑商户信息（获取信息）
+	postEditInvoiceInfo(params){
+		return http.post(path.editInvoiceInfo, params)
+	},
+	//签约用户列表
+	invitationSignList(params){
+		return http.get(path.invitationSignList, params)
+	},
+	//获取签约用户信息
+	getInfo(params){
+		return http.get(path.getInfo, params)
+	},
+	//修改用户信息
+	editInfo(params){
+		return http.post(path.editInfo, params)
+	},
+	//下载签约用户模版
+	userDownLoad(params){
+		return http.get(path.userDownLoad, params)
+	},
+	//上传邀请签约的用户
+	userUpload(params){
+		return http.post(path.userUpload, params)
+	},
+	//商户签约信息
+	storeSub(params){
+		return http.get(path.storeSub, params)
+	},
+	//商户提醒设置信息
+	storeRemind(params){
+		return http.get(path.storeRemind, params)
+	},
+	//商户数据
+	statistics(params){
+		return http.get(path.statistics, params)
+	},
+	//个税扣缴明细
+	taxIndex(params){
+		return http.get(path.taxIndex, params)
+	},
+	//下载个税明细
+	taxDownload(params){
+		return http.get(path.taxDownload, params)
+	},
+	//申请发票第一步
+	invoiceStep1(params){
+		return http.get(path.invoiceStep1, params)
+	},
+	//生成图片预览
+	imageShow(params){
+		return http.post(path.imageShow, params)
+	},
+	//申请发票第二步
+	step2Invoice(params){
+		return http.post(path.step2Invoice, params)
 	},
 }
 

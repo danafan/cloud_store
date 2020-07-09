@@ -84,7 +84,6 @@
 					<el-menu-item-group>
 						<el-menu-item index="/store_info">商户信息</el-menu-item>
 						<el-menu-item index="/sign_info">签约信息</el-menu-item>
-						<el-menu-item index="/docking_info">对接信息</el-menu-item>
 						<el-menu-item index="/remind_setting">提醒设置</el-menu-item>
 					</el-menu-item-group>
 				</el-submenu>
@@ -234,7 +233,9 @@
 				this.activeIndex = '/single';
 			}else if(tab == '/money_record' || tab == '/money_detail'){
 				this.activeIndex = '/money_record';
-			}else{
+			}else if(tab == '/apply' || tab == '/invoice_apply'){
+					this.activeIndex = '/apply';
+				}else{
 				this.activeIndex = tab;
 			}
 			this.crumb = this.$route.name;
@@ -255,6 +256,8 @@
 					this.activeIndex = '/single';
 				}else if(index == '/money_record' || index == '/money_detail'){
 					this.activeIndex = '/money_record';
+				}else if(index == '/apply' || index == '/invoice_apply'){
+					this.activeIndex = '/apply';
 				}else{
 					this.activeIndex = index;
 				}

@@ -20,21 +20,24 @@
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column width="300" prop="created_time" label="所属期" align="center">
+			<el-table-column width="300" prop="tax_day" label="所属期" align="center">
 			</el-table-column>
-			<el-table-column prop="title" label="综合服务主体" align="center">
+			<el-table-column prop="service_subject_name" label="综合服务主体" align="center">
 			</el-table-column>
-			<el-table-column prop="title" label="扣缴明细名称" align="center">
+			<el-table-column prop="store_name" label="扣缴明细名称" align="center">
 			</el-table-column>
-			<el-table-column prop="title" label="接收扣缴明细解压密码邮箱" align="center">
+			<el-table-column prop="email" label="接收扣缴明细解压密码邮箱" align="center">
 			</el-table-column>
 			<el-table-column prop="title" label="下载状态" align="center">
+				<template slot-scope="scope">
+					<span>{{scope.row.status == 0 ? '未下载' : '已下载'}}</span>
+				</template>
 			</el-table-column>
 			<el-table-column prop="title" label="下载信息" align="center">
 			</el-table-column>
 			<el-table-column width="150" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="down(scope.row.id)">下载明细</el-button>
+					<el-button type="text" size="small" @click="down(scope.row.id)" v-if="scope.row.status == 0">下载明细</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -64,8 +67,8 @@
 				req:{
 					page:1,
 					pagesize:10,
-					created_time_start:"",
-					created_time_end:"",	
+					start_time:"",
+					end_time:"",	
 				},				//请求参数
 				date:[],	//时间
 				dataObj:{},	
@@ -78,14 +81,14 @@
 		watch:{
 			//时间
 			date:function(n){
-				this.req.created_time_start = n?n[0]:"";
-				this.req.created_time_end = n?n[1]:"";
+				this.req.start_time = n?n[0]:"";
+				this.req.end_time = n?n[1]:"";
 			}
 		},
 		methods:{
 			//获取列表
 			getList(){
-				resource.letterslist(this.req).then(res => {
+				resource.taxIndex(this.req).then(res => {
 					if(res.data.code == 1){
 						this.dataObj = res.data.data;
 					}else{
@@ -95,11 +98,19 @@
 			},
 			//下载
 			down(id){
-				console.log(id)
+				resource.taxDownload().then(res => {
+					if(res.data.code == 1){
+						let url = res.data.data.url;
+						window.open(url);
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
 			},
 			//搜索
 			search(){
-				console.log(this.req);
+				//获取列表
+				this.getList();
 			},
 			//导出
 			exportFile(){
@@ -111,8 +122,8 @@
 				this.req = {
 					page:1,
 					pagesize:10,
-					created_time_start:"",
-					created_time_end:"",
+					start_time:"",
+					end_time:"",
 				}
 			},
 			//分页

@@ -5,19 +5,19 @@
 				<div class="title_txt">资金提醒设置</div>
 			</div>
 			<div class="info_row">
-				充值到账提醒         短信   邮件
+				充值到账提醒：{{storeInfoObj.recharge_notice_type == 0 ? '短信和邮件' : (storeInfoObj.recharge_notice_type == 1 ? '短信' : '邮件')}}
 			</div>
 			<div class="info_row">
-				账户余额提醒    
+				账户余额提醒：{{storeInfoObj.balance_notice_type == 0 ? '短信和邮件' : (storeInfoObj.recharge_notice_type == 1 ? '短信' : '邮件')}}   
 			</div>
 			<div class="info_row">
-				银行卡余额提醒阈值(元)：50,000.00    
+				银行卡余额提醒阈值(元)：{{storeInfoObj.bank_limit}}    
 			</div>
 			<div class="info_row">
-				支付宝余额提醒阈值(元)：0.00   
+				支付宝余额提醒阈值(元)：{{storeInfoObj.alipay_limt}}   
 			</div>
 			<div class="info_row">
-				微信支付余额提醒阈值(元)：0.00 
+				微信支付余额提醒阈值(元)：{{storeInfoObj.wx_limt}}
 			</div>
 		</el-card>
 		<el-card style="margin-top: 24px;">
@@ -25,19 +25,19 @@
 				<div class="title_txt">接收提醒设置</div>
 			</div>
 			<div class="info_row">
-				充值到账提醒：13968141381
+				充值到账提醒：{{storeInfoObj.recharge_notice_type_name}}
 			</div>
 			<div class="info_row">
-				账户余额不足提醒：13968141381
+				账户余额不足提醒：{{storeInfoObj.balance_notice_type_name}}
 			</div>
 			<div class="info_row">
-				预警及提醒类邮件：wangshuyan1381@dingtalk.com
+				预警及提醒类邮件：{{storeInfoObj.warning_notice_email}}
 			</div>
 			<div class="info_row">
-				账单类提醒邮件：wangshuyan1381@dingtalk.com
+				账单类提醒邮件：{{storeInfoObj.bill_notice_email}}
 			</div>
 			<div class="info_row">
-				报税信息类提醒邮件：wangshuyan1381@dingtalk.com
+				报税信息类提醒邮件：{{storeInfoObj.tax_notice_email}}
 			</div>
 		</el-card>
 	</div>
@@ -83,7 +83,39 @@
 }
 </style>
 <script>
+	import resource from '../../api/resource.js'
 	export default{
+		data(){
+			return{
+				storeInfoObj:{}
+			}
+		},
+		created(){
+			//获取信息
+			this.storeInfo();
+		},
+		methods:{
+			//获取信息
+			storeInfo(){
+				resource.storeRemind().then(res => {
+					if(res.data.code == 1){
+						this.storeInfoObj = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			}
+		}
 
 	}
 </script>
+
+
+
+
+
+
+
+
+
+

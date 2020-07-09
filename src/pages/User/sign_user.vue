@@ -12,13 +12,13 @@
 					<el-input v-model="req.phone" placeholder="请输入"></el-input>
 				</el-form-item>
 				<el-form-item label="信息校验状态：">
-					<el-select v-model="req.info_status" placeholder="不限" clearable>
+					<el-select v-model="req.info_status" clearable>
 						<el-option v-for="item in info_status_list" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="签约状态：">
-					<el-select v-model="req.sign_status" placeholder="不限" clearable>
+					<el-select v-model="req.sign_status" clearable>
 						<el-option v-for="item in sign_status_list" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
@@ -54,26 +54,29 @@
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 	</div>
-	<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-		<el-table-column width="150" fixed prop="shop_num" label="创建时间" align="center">
+	<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+		<el-table-column width="150" fixed prop="create_time" label="创建时间" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="shop_num" label="更新时间" align="center">
+		<el-table-column width="150" prop="update_time" label="更新时间" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="shop_num" label="用户姓名" align="center">
+		<el-table-column width="150" prop="name" label="用户姓名" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="shop_num" label="证件号码" align="center">
+		<el-table-column width="150" prop="id_card_no" label="证件号码" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="shop_num" label="预签约手机号" align="center">
+		<el-table-column width="150" prop="phone" label="预签约手机号" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="shop_num" label="是否是海外或港澳台用户" align="center">
+		<el-table-column width="150" prop="overseas_user" label="是否是海外或港澳台用户" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="shop_num" label="信息校验状态" align="center">
+		<el-table-column width="150" label="信息校验状态" align="center">
+			<template slot-scope="scope">
+				<span>{{scope.row.info_status == 1 ? '信息不匹配' : '校验通过'}}</span>
+			</template>
 		</el-table-column>
-		<el-table-column width="150" prop="shop_num" label="签约状态" align="center">
+		<el-table-column width="150" prop="sign_status" label="签约状态" align="center">
 		</el-table-column>
 		<el-table-column fixed="right" label="操作" align="center">
 			<template slot-scope="scope">
-				<el-button type="text" size="small" @click="edit">修改信息</el-button>
+				<el-button type="text" size="small" @click="edit(scope.row.invitation_id)">修改信息</el-button>
 			</template>
 		</el-table-column>
 	</el-table>
@@ -93,15 +96,15 @@
 <!-- 上传签约用户信息 -->
 <el-dialog title="上传签约用户信息" :visible.sync="uploadSign">
 	<el-form size="small" label-width="150px" style="width: 60%;margin: 0 auto">
-		<el-form-item label="上传签约用户文件：" required>
-			<div class="down_box">
+		<el-form-item label="下载模版：" required>
+			<div class="down_box" @click="downTemp">
 				<img class="down_icon" src="../../assets/down_icon.png">
-				<div class="down_txt">下载签约用户模版</div>
+				<div class="down_txt">下载打款模版</div>
 			</div>
 		</el-form-item>
-		<el-form-item label="证件照片：" required>
-			<div class="showimg" v-if="req.filename != ''" @mouseenter="isDel = true" @mouseleave="isDel = false">
-				<div class="img">这是文件名</div>
+		<el-form-item label="上传文件：" required>
+			<div class="showimg" v-if="fileObj" @mouseenter="isDel = true" @mouseleave="isDel = false">
+				<div class="img">{{fileName}}</div>
 				<div class="modal" v-if="isDel == true">
 					<img src="../../assets/deleteImg.png" @click="detele">
 				</div>
@@ -210,6 +213,7 @@
 }
 </style>
 <script>
+	import resource from '../../api/resource.js'
 	import uploadFile from '../../components/Upload.vue'
 	export default{
 		data(){
@@ -261,17 +265,11 @@
 				}],					//签约状态
 				create_date:[],	//创建时间
 				update_date:[],	//更新时间
-				dataObj:{
-					order_list:[{
-						shop_num:"哈哈哈"
-					}],			//列表
-					total:100
-				},	
+				dataObj:{},	
 				uploadSign:false,		//上传签约用户信息
 				isDel:false,			//删除图片遮罩
-				uploadSingReq:{
-					filename:""
-				},
+				fileName:"",
+				fileObj:{},
 				updateInfo:false,		//修改信息
 				updateInfoReq:{
 					name:"",
@@ -283,7 +281,8 @@
 			}
 		},
 		created(){
-			
+			//获取列表
+			this.invitationSignList();
 		},
 		watch:{
 			//创建时间
@@ -298,13 +297,20 @@
 			}
 		},
 		methods:{
-			//上传签约用户信息
-			upload(){
-
+			//获取列表
+			invitationSignList(){
+				resource.invitationSignList(this.req).then(res => {
+					if(res.data.code == 1){
+						this.dataObj = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
 			},
 			//搜索
 			search(){
-				console.log(this.req);
+				//获取列表
+				this.invitationSignList();
 			},
 			//导出
 			exportFile(){
@@ -312,6 +318,8 @@
 			},
 			//重置
 			reset(){
+				this.create_date = [];
+				this.update_date = [];
 				this.req = {
 					page:1,
 					pagesize:10,
@@ -319,11 +327,11 @@
 					id_card_no:"",
 					phone:"",
 					info_status:"-1",
-					sign_status:"",
+					sign_status:"-1",
 					created_time_start:"",
 					created_time_end:"",
 					updated_time_start:"",
-					updated_time_end:""	
+					updated_time_end:""
 				}
 			},
 			//分页
@@ -338,28 +346,70 @@
 				this.getList();
 			},
 			//修改信息
-			edit(){
-				this.updateInfo = true;
-				console.log("sdasd")
+			edit(id){
+				resource.getInfo({invitation_id:id}).then(res => {
+					if(res.data.code == 1){
+						this.updateInfo = true;
+						this.updateInfoReq = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			},
+			//提交修改用户信息
+			subUpdateInfo(){
+				if(this.updateInfoReq.name == ''){
+					this.$message.warning("请输入用户姓名");
+				}else if(this.updateInfoReq.id_card_no == ''){
+					this.$message.warning("请输入证件号码");
+				}else if(this.updateInfoReq.phone == ''){
+					this.$message.warning("请输入预约手机号");
+				}else{
+					resource.editInfo(this.updateInfoReq).then(res => {
+						if(res.data.code == 1){
+							this.$message.success(res.data.msg);
+							//获取列表
+							this.invitationSignList();
+						}else{
+							this.$message.warning(res.data.msg);
+						}
+					})
+				}
+			},
+			//点击下载模版
+			downTemp(){
+				resource.userDownLoad().then(res => {
+					if(res.data.code == 1){
+						let downUrl = res.data.data;
+						window.open(downUrl)
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
 			},
 			//上传文件
 			callbackFn(obj){
-				console.log(obj)
-				this.req.filename = "asd"
-				// this.objReq.banner_img = obj.url;
-				// this.domain = obj.domain;
+				this.fileName = obj.name;
+				this.fileObj = obj;
 			},
 			//删除文件
 			detele(){
-
+				this.fileName = "";
+				this.fileObj = null;
 			},
-			//提交已签约用户信息
 			subUploadSing(){
-
-			},
-			//提交用户信息
-			subUpdateInfo(){
-				console.log(applyInfo)
+				if(this.fileName == ""){
+					this.$message.warning("请上传文件");
+				}else{
+					resource.userUpload({invitation_user:this.fileObj}).then(res => {
+						if(res.data.code == 1){
+							this.$message.success(res.data.msg);
+							this.uploadSign = false;
+						}else{
+							this.$message.warning(res.data.msg);
+						}
+					})
+				}
 			}
 
 		},

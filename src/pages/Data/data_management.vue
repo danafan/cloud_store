@@ -20,51 +20,57 @@
 		<el-button type="primary" size="small" @click="reset">重置</el-button>
 	</div>
 	<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column width="150" fixed prop="shop_num" label="日期" align="center">
+			<el-table-column width="150" fixed prop="add_time" label="日期" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="公司名称" align="center">
+			<el-table-column width="150" prop="enterprise_name" label="公司名称" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="成功订单总金额（元）" align="center">
+			<el-table-column width="150" prop="total_success_money" label="成功订单总金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="银行卡成功订单金额（元）" align="center">
+			<el-table-column width="150" prop="store_success_bank_money" label="银行卡成功订单金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="支付宝成功订单金额（元）" align="center">
+			<el-table-column width="150" prop="store_success_alipay_money" label="支付宝成功订单金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="用户成功收款总金额（元）" align="center">
+			<el-table-column width="150" prop="total_success_money" label="用户成功收款总金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="银行卡用户成功收款金额（元）" align="center">
+			<el-table-column width="150" prop="user_success_bank_money" label="银行卡用户成功收款金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="支付宝用户成功收款金额" align="center">
+			<el-table-column width="150" prop="user_success_alipay_money" label="支付宝用户成功收款金额" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="部分退款订单用户实收金额（元）" align="center">
+			<el-table-column width="150" prop="store_refund_service_money" label="部分退款订单用户实收金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="成功打款笔数" align="center">
+			<el-table-column width="150" prop="total_success_num" label="成功打款笔数" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="银行卡成功打款笔数" align="center">
+			<el-table-column width="150" prop="bank_success_num" label="银行卡成功打款笔数" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="支付宝成功打款笔数" align="center">
+			<el-table-column width="150" prop="alipay_success_num" label="支付宝成功打款笔数" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="失败订单笔数" align="center">
+			<el-table-column width="150" prop="fail_num" label="失败订单笔数" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="失败订单金额（元）" align="center">
+			<el-table-column width="150" prop="fail_money" label="失败订单金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="充值总笔数" align="center">
+			<el-table-column width="150" prop="recharge_num" label="充值总笔数" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="充值总金额（元）" align="center">
+			<el-table-column width="150" prop="recharge_money" label="充值总金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="实收成功订单商户服务费金额（元）" align="center">
+			<el-table-column width="150" prop="total_service_money" label="实收成功订单商户服务费金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="退款订单商户服务费金额（元）" align="center">
+			<el-table-column width="150" prop="store_refund_service_money" label="退款订单商户服务费金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="服务费返点使用总额（元）" align="center">
+			<el-table-column width="150" prop="deduction_service_money" label="服务费返点使用总额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="商户ID" align="center">
+			<el-table-column width="150" prop="store_id" label="商户ID" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="C端签约" align="center">
+			<el-table-column width="150" label="C端签约" align="center">
+				<template slot-scope="scope">
+					<span>微信</span>
+				</template>
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="客户经理" align="center">
+			<el-table-column width="150" prop="account_manager_id" label="客户经理" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="shop_num" label="技术对接" align="center">
+			<el-table-column width="150" label="技术对接" align="center">
+				<template slot-scope="scope">
+					<span>{{scope.row.is_technology == 1 ? '是' : '否'}}</span>
+				</template>
 			</el-table-column>
 		</el-table>
 		<div class="page">
@@ -86,6 +92,7 @@
 
 </style>
 <script>
+	import resource from '../../api/resource.js'
 	export default{
 		data(){
 			return{
@@ -96,17 +103,13 @@
 					end_time:"",	
 				},				//请求参数
 				date:[],	//时间
-				dataObj:{
-					order_list:[{
-						shop_num:"哈哈哈"
-					}],			//订单列表
-					total:100
-				},	
+				dataObj:{},	
 				
 			}
 		},
 		created(){
-			
+			//获取列表
+			this.getList();
 		},
 		watch:{
 			//时间
@@ -116,9 +119,20 @@
 			}
 		},
 		methods:{
+			//获取列表
+			getList(){
+				resource.statistics(this.req).then(res => {
+					if(res.data.code == 1){
+						this.dataObj = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			},
 			//搜索
 			search(){
-				console.log(this.req);
+				//获取列表
+				this.getList();
 			},
 			//导出
 			exportFile(){
@@ -126,6 +140,7 @@
 			},
 			//重置
 			reset(){
+				this.date = [];
 				this.req = {
 					page:1,
 					pagesize:10,

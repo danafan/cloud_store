@@ -451,7 +451,7 @@
 					id_card_no:"",
 					order_status:"0",
 				},						//第二步获取列表参数
-				current_step:3,			// 当前步骤
+				current_step:1,			// 当前步骤
 				channel_list:[{
 					id:"1",
 					name:"银行卡"

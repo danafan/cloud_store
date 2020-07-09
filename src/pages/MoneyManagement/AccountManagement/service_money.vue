@@ -7,11 +7,11 @@
 					<div class="info_row">
 						<div class="row_item">
 							<div class="row_item_label">可用余额（元）</div>
-							<div class="row_item_val">0.00</div>
+							<div class="row_item_val">{{storeInfo.service_balance}}</div>
 						</div>
 						<div class="row_item">
 							<div class="row_item_label">不可用余额（元）</div>
-							<div class="row_item_val">0.00</div>
+							<div class="row_item_val">{{storeInfo.service_frozen_amount}}</div>
 						</div>
 					</div>
 				</div>
@@ -31,13 +31,13 @@
 				</el-date-picker>
 			</el-form-item>
 			<el-form-item label="交易类型：">
-				<el-select v-model="req.trading_type" placeholder="不限" clearable>
+				<el-select v-model="req.business_type" placeholder="不限" clearable>
 					<el-option v-for="item in trading_list" :key="item.id" :label="item.name" :value="item.id">
 					</el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item label="收支类型">
-				<el-select v-model="req.payments" placeholder="不限" clearable>
+				<el-select v-model="req.io_type" placeholder="不限" clearable>
 					<el-option v-for="item in payments_list" :key="item.id" :label="item.name" :value="item.id">
 					</el-option>
 				</el-select>
@@ -48,18 +48,18 @@
 			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
-		<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column prop="shop_num" label="入账时间" align="center">
+		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+			<el-table-column prop="happen_time" label="入账时间" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="综合服务主体" align="center">
+			<el-table-column prop="service_subject_name" label="综合服务主体" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="流水号" align="center">
+			<el-table-column prop="bill_id" label="流水号" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="交易类型" align="center">
+			<el-table-column prop="businessName" label="交易类型" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="收支类型" align="center">
+			<el-table-column prop="io_type" label="收支类型" align="center">
 			</el-table-column>
-			<el-table-column prop="shop_num" label="入账金额" align="center">
+			<el-table-column prop="money" label="入账金额" align="center">
 			</el-table-column>
 		</el-table>
 		<div class="page">
@@ -114,16 +114,17 @@
 }
 </style>
 <script>
+	import resource from '../../../api/resource.js'
 	export default{
 		data(){
 			return{
 				req:{
 					page:1,
 					pagesize:10,
-					created_time_start:"",
-					created_time_end:"",
-					trading_type:"0",
-					payments:"0"
+					happen_start_time:"",
+					happen_end_time:"",
+					business_type:"0",
+					io_type:"0"
 				},				//请求参数
 				date:[],		//入账时间
 				trading_list:[{
@@ -134,13 +135,10 @@
 					name:"阶梯返点"
 				},{
 					id:"2",
-					name:"额外返点"
+					name:"余额抵扣服务费"
 				},{
 					id:"3",
-					name:"账单抵扣"
-				},{
-					id:"4",
-					name:"实时抵扣"
+					name:"服务费账户抵扣服务费"
 				}],	//充值类型
 				payments_list:[{
 					id:"0",
@@ -152,26 +150,43 @@
 					id:"2",
 					name:"支出"
 				}],	//资金用途
-				dataObj:{
-					order_list:[{
-						shop_num:"哈哈哈"
-					}],			//订单列表
-					total:100
-				},	
+				dataObj:{},	
+				storeInfo:{},
 				
 			}
 		},
 		created(){
-			
+			//获取列表
+			this.getList();
 		},
 		watch:{
 			//入账时间
 			date:function(n){
-				this.req.created_time_start = n?n[0]:"";
-				this.req.created_time_end = n?n[1]:"";
+				this.req.happen_start_time = n?n[0]:"";
+				this.req.happen_end_time = n?n[1]:"";
 			}
 		},
 		methods:{
+			//获取顶部信息
+			getStoreInfo(){
+				resource.storeInfo().then(res => {
+					if(res.data.code == 1){
+						this.storeInfo = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			},
+			//获取列表
+			getList(){
+				resource.serviceChargeRecord(this.req).then(res => {
+					if(res.data.code == 1){
+						this.dataObj = res.data.data;
+					}else{
+						this.$message.warning(res.data.msg);
+					}
+				})
+			},
 			//搜索
 			search(){
 				console.log(this.req);
@@ -182,13 +197,14 @@
 			},
 			//重置
 			reset(){
+				this.date = [];
 				this.req = {
 					page:1,
 					pagesize:10,
-					created_time_start:"",
-					created_time_end:"",
-					trading_type:"0",
-					payments:"0"
+					happen_start_time:"",
+					happen_end_time:"",
+					business_type:"0",
+					io_type:"0"
 				}
 			},
 			//分页

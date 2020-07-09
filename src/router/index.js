@@ -18,13 +18,13 @@ const money_dis = resolve=>require(['@/pages/MoneyManagement/money_dis'],resolve
 const bill_list = resolve=>require(['@/pages/Bill/bill_list'],resolve)
 const bill_detail = resolve=>require(['@/pages/Bill/bill_detail'],resolve)
 const apply = resolve=>require(['@/pages/Invoice/apply'],resolve)
+const invoice_apply = resolve=>require(['@/pages/Invoice/invoice_apply'],resolve)
 const apply_record = resolve=>require(['@/pages/Invoice/apply_record'],resolve)
 const has_invoice = resolve=>require(['@/pages/Invoice/has_invoice'],resolve)
 const invoice_info = resolve=>require(['@/pages/Invoice/invoice_info'],resolve)
 const sign_user = resolve=>require(['@/pages/User/sign_user'],resolve)
 const store_info = resolve=>require(['@/pages/Store/store_info'],resolve)
 const sign_info = resolve=>require(['@/pages/Store/sign_info'],resolve)
-const docking_info = resolve=>require(['@/pages/Store/docking_info'],resolve)
 const remind_setting = resolve=>require(['@/pages/Store/remind_setting'],resolve)
 const data_management = resolve=>require(['@/pages/Data/data_management'],resolve)
 const correspondence = resolve=>require(['@/pages/Message/correspondence'],resolve)
@@ -59,13 +59,13 @@ const router = new Router({
     { path: '/bill_list',name:"账单管理/余额日账单", component: bill_list},
     { path: '/bill_detail',name:"余额日账单/详情", component: bill_detail},
     { path: '/apply',name:"发票管理/发票申请", component: apply},
+    { path: '/invoice_apply',name:"发票管理/发票申请", component: invoice_apply},
     { path: '/apply_record',name:"发票管理/申请记录", component: apply_record},
     { path: '/has_invoice',name:"发票管理/已开发票", component: has_invoice},
     { path: '/invoice_info',name:"发票管理/开票信息", component: invoice_info},
     { path: '/sign_user',name:"用户管理/签约用户", component: sign_user},
     { path: '/store_info',name:"商户管理/商户信息", component: store_info},
     { path: '/sign_info',name:"商户管理/签约信息", component: sign_info},
-    { path: '/docking_info',name:"商户管理/对接信息", component: docking_info},
     { path: '/remind_setting',name:"商户管理/提醒设置", component: remind_setting},
     { path: '/data_management',name:"数据管理/商户数据", component: data_management},
     { path: '/correspondence',name:"消息管理/函件通知", component: correspondence},
