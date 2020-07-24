@@ -30,6 +30,7 @@ const data_management = resolve=>require(['@/pages/Data/data_management'],resolv
 const correspondence = resolve=>require(['@/pages/Message/correspondence'],resolve)
 const system = resolve=>require(['@/pages/Message/system'],resolve)
 const account_pre = resolve=>require(['@/pages/Permissions/account_pre'],resolve)
+const management = resolve=>require(['@/pages/Permissions/management'],resolve)
 const buckle_pay = resolve=>require(['@/pages/Tax/buckle_pay'],resolve)
 
 Vue.use(Router)
@@ -71,6 +72,7 @@ const router = new Router({
     { path: '/correspondence',name:"消息管理/函件通知", component: correspondence},
     { path: '/system',name:"消息管理/系统公告", component: system},
     { path: '/account_pre',name:"权限管理/账号管理", component: account_pre},
+    { path: '/management',name:"权限管理/权限管理", component: management},
     { path: '/buckle_pay',name:"税务管理管理/个税扣缴明细", component: buckle_pay},
     ]
   }

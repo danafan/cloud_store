@@ -7,7 +7,7 @@ import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
 Vue.use(ElementUI);
-// Vue.prototype.captcha = `${location.origin}/admin/admin/captcha`;		//获取验证码前缀
+Vue.prototype.judgmentPhone = /^1[3456789]\d{9}$/;		//手机号正则
 new Vue({
   render: h => h(App),
   router

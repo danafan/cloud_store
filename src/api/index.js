@@ -8,7 +8,7 @@ const instance = axios.create({
 
 instance.interceptors.response.use(response => {
   switch (response.data.code) {
-    case 400:
+    case 10000:
     sessionStorage.clear();
     router.replace("/login");
   }

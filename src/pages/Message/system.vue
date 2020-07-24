@@ -15,7 +15,7 @@
 			</el-form-item>
 		</el-form>
 		<div class="but">
-			<el-button type="primary" size="small" @click="search">搜索</el-button>
+			<el-button type="primary" size="small" @click="getList">搜索</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 		<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
@@ -109,11 +109,6 @@ width="30%">
 					}
 				})
 			},
-			//搜索
-			search(){
-				//获取列表
-				this.getList()
-			},
 			//重置
 			reset(){
 				this.date = [];
@@ -121,7 +116,7 @@ width="30%">
 					page:1,
 					pagesize:10,
 					created_time_start:"",
-					created_time_end:"",
+					created_time_end:"",	
 				}
 			},
 			//分页

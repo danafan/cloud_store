@@ -49,8 +49,7 @@
 	<div class="huajian">
 		<el-button type="primary" size="small" icon="el-icon-upload" @click="uploadSign = true">上传签约用户信息</el-button>
 		<div class="but">
-			<el-button type="primary" size="small" @click="search">搜索</el-button>
-			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
+			<el-button type="primary" size="small" @click="getList">搜索</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 	</div>
@@ -307,15 +306,6 @@
 					}
 				})
 			},
-			//搜索
-			search(){
-				//获取列表
-				this.invitationSignList();
-			},
-			//导出
-			exportFile(){
-				console.log(this.req);
-			},
 			//重置
 			reset(){
 				this.create_date = [];
@@ -327,7 +317,7 @@
 					id_card_no:"",
 					phone:"",
 					info_status:"-1",
-					sign_status:"-1",
+					sign_status:"",
 					created_time_start:"",
 					created_time_end:"",
 					updated_time_start:"",

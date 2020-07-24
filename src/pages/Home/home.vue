@@ -122,6 +122,7 @@
 					</template>
 					<el-menu-item-group>
 						<el-menu-item index="/account_pre">账号管理</el-menu-item>
+						<el-menu-item index="/management">权限管理</el-menu-item>
 					</el-menu-item-group>
 				</el-submenu>
 			</el-menu>
@@ -270,7 +271,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					resource.loginOut().then(res => {
+					resource.quit().then(res => {
 						if(res.data.code == 1){
 							sessionStorage.clear();
 							this.$message.success(res.data.msg);

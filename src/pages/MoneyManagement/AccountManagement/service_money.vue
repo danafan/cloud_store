@@ -44,8 +44,7 @@
 			</el-form-item>
 		</el-form>
 		<div class="but">
-			<el-button type="primary" size="small" @click="search">搜索</el-button>
-			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
+			<el-button type="primary" size="small" @click="getList">搜索</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
@@ -186,14 +185,6 @@
 						this.$message.warning(res.data.msg);
 					}
 				})
-			},
-			//搜索
-			search(){
-				console.log(this.req);
-			},
-			//导出
-			exportFile(){
-				console.log(this.req);
 			},
 			//重置
 			reset(){

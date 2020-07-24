@@ -22,7 +22,7 @@
 			</el-form-item>
 		</el-form>
 		<div class="but">
-			<el-button type="primary" size="small" @click="search">搜索</el-button>
+			<el-button type="primary" size="small" @click="applyList">搜索</el-button>
 			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
@@ -204,6 +204,7 @@
 </style>
 <script>
 	import resource from '../../api/resource.js'
+	import exportFile from '../../api/export.js'
 	export default{
 		data(){
 			return{
@@ -268,13 +269,14 @@
 					}
 				})
 			},
-			//搜索
-			search(){
-				console.log(this.req);
-			},
 			//导出
 			exportFile(){
-				console.log(this.req);
+				var arr = [];
+				for(var item in this.req){
+					let str = item + '=' + this.req[item];
+					arr.push(str);
+				};
+				exportFile.exportUp(`invoice/applylistexport?${arr.join('&')}`)
 			},
 			//重置
 			reset(){

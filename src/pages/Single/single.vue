@@ -44,8 +44,7 @@
 
 		</el-form>
 		<div class="but">
-			<el-button type="primary" size="small" @click="search">搜索</el-button>
-			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
+			<el-button type="primary" size="small" @click="getList">搜索</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
@@ -65,14 +64,14 @@
 			</el-table-column>
 			<el-table-column width="150" label="状态" align="center">
 				<template slot-scope="scope">
-					<span>{{feedback_status | feedback}}</span>
+					<span>{{scope.row.feedback_status | feedback}}</span>
 				</template>
 			</el-table-column>
 			<el-table-column width="150" prop="feedback_end_time" label="距离反馈截止日" align="center">
 			</el-table-column>
 			<el-table-column width="150" label="审核结论" align="center">
 				<template slot-scope="scope">
-					<span>{{audit_status | audit}}</span>
+					<span>{{scope.row.audit_status | audit}}</span>
 				</template>
 			</el-table-column>
 			<el-table-column width="150" prop="audit_desc" label="审核结论说明" align="center">
@@ -183,15 +182,6 @@
 						this.$message.warning(res.data.msg);
 					}
 				});
-			},
-			//搜索
-			search(){
-				//获取列表
-				this.getList()
-			},
-			//导出
-			exportFile(){
-				console.log(this.req);
 			},
 			//重置
 			reset(){

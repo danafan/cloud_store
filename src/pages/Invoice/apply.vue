@@ -23,8 +23,7 @@
 					:default-time="['00:00:00', '23:59:59']">
 				</el-date-picker>
 			</el-form-item>
-			<el-button type="primary" size="small" @click="search">搜索</el-button>
-			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
+			<el-button type="primary" size="small" @click="getList">搜索</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</el-form>
 		<div class="apply_money">
@@ -133,15 +132,6 @@
 					}
 				})
 			},
-			//搜索
-			search(){
-				//获取列表
-				this.getList();
-			},
-			//导出
-			exportFile(){
-				console.log(this.req);
-			},
 			//重置
 			reset(){
 				this.date = [];
@@ -150,8 +140,6 @@
 					pagesize:10,
 					start_time:"",
 					end_time:"",
-					invoice_code:"",
-					apply_id:""
 				}
 			},
 			//分页
