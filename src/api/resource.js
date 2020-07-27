@@ -32,16 +32,16 @@ let path = {
 	transfer:'storebill/transfer',								//转账
 	serviceChargeRecord:'storebill/servicechargerecord',		//服务费记录
 	accountChange:'storebill/accountchange',					//资金流水
-	daybillIndex:'daybill/getorderlist',								//余额日账单表
+	daybillIndex:'daybill/index',								//余额日账单表
 	billOrderList:'daybill/orderlist',							//余额日账单详情
 	getBillInfo:'daybill/getinfo',								//余额日账单详情（顶部）
 	billlist:'invoice/billlist',								//发票申请账单列表
 	applyList:'invoice/applylist',								//发票申请记录
 	applyDetail:'invoice/applydetail',							//发票详情
-	invoiceConfirm:'invoice/confirmleter',							//生成确认函
-	invoiceList:'invoice/invoicelist',									//已开发票列表
-	invoiceInfo:'invoice/storeinvoiceinfo',							//商户开票信息
-	editInvoiceInfo:'invoice/editstoreinvoiceInfo',					//修改商户信息（获取和修改）
+	invoiceConfirm:'invoice/confirmleter',						//生成确认函
+	invoiceList:'invoice/invoicelist',							//已开发票列表
+	invoiceInfo:'invoice/storeinvoiceinfo',						//商户开票信息
+	editInvoiceInfo:'invoice/editstoreinvoiceInfo',				//修改商户信息（获取和修改）
 	invitationSignList:'user/invitationsignlist',				//签约用户列表
 	getInfo:'user/getinfo',										//获取签约用户信息
 	editInfo:'user/editinfo',									//修改用户信息

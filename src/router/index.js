@@ -60,7 +60,7 @@ const router = new Router({
     { path: '/bill_list',name:"账单管理/余额日账单", component: bill_list},
     { path: '/bill_detail',name:"余额日账单/详情", component: bill_detail},
     { path: '/apply',name:"发票管理/发票申请", component: apply},
-    { path: '/invoice_apply',name:"发票管理/发票申请", component: invoice_apply},
+    { path: '/invoice_apply',name:"发票管理/申请发票", component: invoice_apply},
     { path: '/apply_record',name:"发票管理/申请记录", component: apply_record},
     { path: '/has_invoice',name:"发票管理/已开发票", component: has_invoice},
     { path: '/invoice_info',name:"发票管理/开票信息", component: invoice_info},

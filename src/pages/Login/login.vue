@@ -1,7 +1,7 @@
 <template>
 	<div class="cardBox">
 		<div class="left_box">
-			<img class="back_img" src="../../assets/jby_back.png">
+			<img class="back_img" :src="qn_url + 'jby_back.png'">
 			<div class="name">集宝园</div>
 		</div>
 		<div class="right_box">
@@ -17,7 +17,7 @@
 					<div class="code" @click="getCode">{{codebutTxt}}</div>
 				</div>
 			</div>
-			<div class="login_but">登录</div>
+			<div class="login_but" @click="login">登录</div>
 		</div>
 	</div>
 </template>
@@ -190,7 +190,8 @@
 						if(res.data.code == '1'){
 							localStorage.setItem("token",res.data.data.login_token);
 							localStorage.setItem("secret_key",res.data.data.secret_key);
-							localStorage.setItem("user_id",res.data.data.user_id);
+							localStorage.setItem("admin_id",res.data.data.admin_id);
+							localStorage.setItem("admin_name",res.data.data.admin_name);
 							this.$message.success("登录成功");
 							this.$router.push('/index');
 						}else{
