@@ -12,6 +12,7 @@ export default {
       target.admin_id = admin_id;
       target.login_token = login_token;
       target.timestamp = timestamp;
+      target.random = Math.random();
     }
     Object.assign(params, target);
     let form = new FormData();
@@ -29,7 +30,9 @@ export default {
     obj.secret_key = secret_key;
     let str = "";
     for(var i in obj){
-      str += `${i}=${obj[i]}&`
+      if(i != 'invitation_user' && i != 'pay_order'){
+        str += `${i}=${obj[i]}&`
+      }
     }
      //生成签名
      str=str.substring(0,str.length-1)
@@ -48,6 +51,7 @@ export default {
       target.admin_id = admin_id;
       target.login_token = login_token;
       target.timestamp = timestamp;
+      target.random = Math.random();
     }
     Object.assign(params, target);
     let arr = [];

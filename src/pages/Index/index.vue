@@ -1,15 +1,15 @@
 <template>
 	<div>
 		<div class="tabs">
-			<div class="tab_item">
+			<div class="tab_item" @click="$router.push('/account_management')">
 				<img class="tab_icon" :src="qn_url + 'index_top_up.png'">
 				<div class="tab_txt">账户充值</div>
 			</div>
-			<div class="tab_item">
+			<div class="tab_item" @click="$router.push('/batch_money')">
 				<img class="tab_icon" :src="qn_url + 'index_send_money.png'">
 				<div class="tab_txt">批量打款</div>
 			</div>
-			<div class="tab_item">
+			<div class="tab_item" @click="$router.push('/apply')">
 				<img class="tab_icon" :src="qn_url + 'index_apply.png'">
 				<div class="tab_txt">发票申请</div>
 			</div>
@@ -17,10 +17,6 @@
 		<el-card style="margin-top: 24px">
 			<div class="index_card_title">
 				<div class="title_text">待处理事务</div>
-				<div class="title_right">
-					更多详情
-					<img class="right_icon" src="../../assets/right_icon.png">
-				</div>
 			</div>
 			<div class="mess_box">
 				<div class="mess_item" @click="$router.push('/system')">
@@ -37,6 +33,10 @@
 		<el-card style="margin-top: 24px">
 			<div class="index_card_title">
 				<div class="title_text">账户概览</div>
+				<div class="title_right" @click="$router.push('/account_management')">
+					更多详情
+					<img class="right_icon" src="../../assets/right_icon.png">
+				</div>
 			</div>
 			<div class="account_box">
 				<div class="account_item">
@@ -50,90 +50,109 @@
 							<div class="content_item_val">{{indexObj.balance}}</div>
 						</div>
 						<div class="content_item">
-							<div class="content_item_label">不可用金额（元）</div>
-							<div class="content_item_val">{{indexObj.frozen_amount}}</div>
+							<div class="content_item_label">不可用金额（元）
+								<el-popover
+								placement="top-start"
+								width="300"
+								trigger="hover"
+								content="当您发起打款、转账、提现后，资金在审核过程中暂不可用">
+								<img class="reference" slot="reference" src="../../assets/reference.png">
+							</el-popover>
 						</div>
+						<div class="content_item_val">{{indexObj.frozen_amount}}</div>
 					</div>
 				</div>
-				<div class="line"></div>
-				<div class="account_item">
-					<div class="item_title">
-						<img class="account_icon" src="../../assets/blue_¥.png">
-						服务费抵扣账户
-					</div>
-					<div class="account_content">
-						<div class="content_item">
-							<div class="content_item_label">可用余额（元）</div>
-							<div class="content_item_val">{{indexObj.service_balance}}</div>
-						</div>
-						<div class="content_item">
-							<div class="content_item_label">累计返还（元）</div>
-							<div class="content_item_val">{{indexObj.all_return_money}}</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</el-card>
-		<el-card style="margin-top: 24px">
-			<div class="index_card_title">
-				<div class="title_text">业务概览</div>
-				<el-date-picker
-					v-model="date"
-					type="datetimerange"
-					value-format="yyyy-MM-dd HH:mm:ss"
-					range-separator="至"
-					start-placeholder="开始时间"
-					end-placeholder="结束时间"
-					:default-time="['00:00:00', '23:59:59']">
-				</el-date-picker>
-			</el-date-picker>
-		</div>
-		<div class="business_box">
-			<div class="business_item">
-				<div class="business_content">
-					<div class="business_content_item">
-						<div class="business_item_label">打款成功总额（元）</div>
-						<div class="business_item_val">{{accountInfoObj.total_success_money}}</div>
-						<div class="pink_yuan">
-							<div>成功</div>
-							<div>{{accountInfoObj.total_success_num}}笔</div>
-						</div>
-					</div>
-					<div class="business_content_item">
-						<div class="business_item_label">请求打款总额（元）</div>
-						<div class="business_item_val">{{accountInfoObj.total_pay_money}}</div>
-						<div class="blue_yuan">
-							<div>共计</div>
-							<div>{{accountInfoObj.total_pay_num}}笔</div>
-						</div>
-					</div>
-				</div>
-				<div class="tiao" @click="$router.push('/trade_order')">查看交易订单>></div>
 			</div>
 			<div class="line"></div>
-			<div class="business_item">
-				<div class="business_content">
-					<div class="business_content_item">
-						<div class="business_item_label">签收发票总额（元）</div>
-						<div class="business_item_val">{{accountInfoObj.finish_price_tax}}</div>
-						<div class="pink_yuan">
-							<div>成功</div>
-							<div>{{accountInfoObj.finish_invoice_num}}笔</div>
-						</div>
-					</div>
-					<div class="business_content_item">
-						<div class="business_item_label">申请发票总额（元）</div>
-						<div class="business_item_val">{{accountInfoObj.apply_price_tax}}</div>
-						<div class="blue_yuan">
-							<div>共计</div>
-							<div>{{accountInfoObj.apply_invoice_num}}笔</div>
-						</div>
-					</div>
+			<div class="account_item">
+				<div class="item_title">
+					<img class="account_icon" src="../../assets/blue_¥.png">
+					服务费抵扣账户
 				</div>
-				<div class="tiao" @click="$router.push('/apply_record')">查看发票申请记录>></div>
+				<div class="account_content">
+					<div class="content_item">
+						<div class="content_item_label">可用余额（元）
+							<el-popover
+							placement="top-start"
+							width="300"
+							trigger="hover"
+							content="可用余额≥打款订单服务费时，服务费将由此账户可用余额进行抵扣。
+							抵扣与返还记录可查询服务费抵扣账户明细">
+							<img class="reference" slot="reference" src="../../assets/reference.png">
+						</el-popover>
+					</div>
+					<div class="content_item_val">{{indexObj.service_balance}}</div>
+				</div>
+				<div class="content_item">
+					<div class="content_item_label">累计返还（元）</div>
+					<div class="content_item_val">{{indexObj.all_return_money}}</div>
+				</div>
 			</div>
 		</div>
-	</el-card>
+	</div>
+</el-card>
+<el-card style="margin-top: 24px">
+	<div class="index_card_title">
+		<div class="title_text">业务概览</div>
+		<el-date-picker
+		v-model="date"
+		type="datetimerange"
+		value-format="yyyy-MM-dd HH:mm:ss"
+		:picker-options="pickerOptions"
+		range-separator="至"
+		start-placeholder="开始日期"
+		end-placeholder="结束日期"
+		align="right"
+		:default-time="['00:00:00', '23:59:59']"
+		>
+	</el-date-picker>
+</div>
+<div class="business_box">
+	<div class="business_item">
+		<div class="business_content">
+			<div class="business_content_item">
+				<div class="business_item_label">打款成功总额（元）</div>
+				<div class="business_item_val">{{accountInfoObj.total_success_money}}</div>
+				<div class="pink_yuan">
+					<div>成功</div>
+					<div>{{accountInfoObj.total_success_num}}笔</div>
+				</div>
+			</div>
+			<div class="business_content_item">
+				<div class="business_item_label">请求打款总额（元）</div>
+				<div class="business_item_val">{{accountInfoObj.total_pay_money}}</div>
+				<div class="blue_yuan">
+					<div>共计</div>
+					<div>{{accountInfoObj.total_pay_num}}笔</div>
+				</div>
+			</div>
+		</div>
+		<div class="tiao" @click="$router.push('/trade_order')">查看交易订单>></div>
+	</div>
+	<div class="line"></div>
+	<div class="business_item">
+		<div class="business_content">
+			<div class="business_content_item">
+				<div class="business_item_label">签收发票总额（元）</div>
+				<div class="business_item_val">{{accountInfoObj.finish_price_tax}}</div>
+				<div class="pink_yuan">
+					<div>成功</div>
+					<div>{{accountInfoObj.finish_invoice_num}}笔</div>
+				</div>
+			</div>
+			<div class="business_content_item">
+				<div class="business_item_label">申请发票总额（元）</div>
+				<div class="business_item_val">{{accountInfoObj.apply_price_tax}}</div>
+				<div class="blue_yuan">
+					<div>共计</div>
+					<div>{{accountInfoObj.apply_invoice_num}}笔</div>
+				</div>
+			</div>
+		</div>
+		<div class="tiao" @click="$router.push('/apply_record')">查看发票申请记录>></div>
+	</div>
+</div>
+</el-card>
 </div>
 </template>
 <style lang="less" scoped>
@@ -241,6 +260,12 @@
 				margin-bottom: 6px;
 				font-size: 14px;
 				color: #666666;
+				display: flex;
+				align-items: center;
+				.reference{
+					width: 16px;
+					height: 16px;
+				}
 			}
 			.content_item_val{
 				font-size: 26px;
@@ -354,10 +379,20 @@
 			}
 		},
 		created(){
+			//当前设定的日期时间
+			let d = new Date
+			let year1,month1,day1,hours1,minutes1,seconds1;
+			[year1,month1,day1,hours1,minutes1,seconds1] = [d.getFullYear(),d.getMonth() + 1,d.getDate(),d.getHours(),d.getMinutes(),d.getSeconds()]
+			let date1 = year1 + '-' + month1 + '-' + day1 + ' ' + hours1 + ':' + minutes1 + ':' + seconds1
+			this.date.push(date1)
+			//前一天设定的日期时间
+			let year2,month2,day2,hours2,minutes2,seconds2
+			d.setTime(d.getTime() - 3600 * 1000 * 24 * 30);
+			[year2,month2,day2,hours2,minutes2,seconds2] = [d.getFullYear(),d.getMonth() + 1,d.getDate(),d.getHours(),d.getMinutes(),d.getSeconds()]
+			let date2 = year2 + '-' + month2 + '-' + day2 + ' ' + hours2 + ':' + minutes2 + ':' + seconds2
+			this.date.unshift(date2)
 			//账户概览和待处理事务
 			this.index();
-			//业务概览
-			this.accountInfo();
 		},
 		watch:{
 			//订单创建时间
