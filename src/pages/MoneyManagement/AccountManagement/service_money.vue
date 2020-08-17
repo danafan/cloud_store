@@ -13,6 +13,10 @@
 							<div class="row_item_label">不可用余额（元）</div>
 							<div class="row_item_val">{{storeInfo.service_frozen_amount}}</div>
 						</div>
+						<div class="row_item">
+							<div class="row_item_label">累计返还（元）</div>
+							<div class="row_item_val">{{storeInfo.all_return_money}}</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -155,14 +159,16 @@
 			}
 		},
 		created(){
+			//获取顶部信息
+			this.getStoreInfo();
 			//获取列表
 			this.getList();
 		},
 		watch:{
 			//入账时间
 			date:function(n){
-				this.req.happen_start_time = n?n[0]:"";
-				this.req.happen_end_time = n?n[1]:"";
+				this.req.happen_start_time = n && n.length> 0?n[0]:"";
+				this.req.happen_end_time = n && n.length> 0?n[1]:"";
 			}
 		},
 		methods:{

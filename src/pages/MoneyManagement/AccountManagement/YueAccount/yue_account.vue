@@ -53,27 +53,18 @@
 			<div class="info_box">
 				<div class="info_row">
 					<div class="row_left">预期付款账户：{{storeInfo.enterprise_name}}</div>
+				</div>
+				<div class="info_row">
+					<div class="row_left">账户名称：{{accountObj.service_subject_company_name}}</div>
 					<button type="button" 
 					class="copy" 
-					v-clipboard:copy="storeInfo.enterprise_name"
+					v-clipboard:copy="accountObj.service_subject_company_name"
 					v-clipboard:success="onCopy"
 					>复制</button>
 				</div>
 				<div class="info_row">
-					<div class="row_left">账户名称：{{accountObj.service_subject_name}}</div>
-					<button type="button" 
-					class="copy" 
-					v-clipboard:copy="accountObj.service_subject_name"
-					v-clipboard:success="onCopy"
-					>复制</button>
-				</div>
-				<div class="info_row">
-					<div class="row_left">开户银行：{{accountObj.bank_name}}</div>
-					<button type="button" 
-					class="copy" 
-					v-clipboard:copy="accountObj.bank_name"
-					v-clipboard:success="onCopy"
-					>复制</button>
+					<div class="row_left">开户银行：</div>
+					
 				</div>
 				<div class="info_row">
 					<div class="row_left">专属账户：{{accountObj.bank_no}}</div>
@@ -114,7 +105,7 @@
 				<el-form-item label="综合服务主体：" label-width="120px">
 					<span>{{accountObj.service_subject_name}}</span>
 				</el-form-item>
-				<el-form-item label-width="80px" label="收款商户">
+				<el-form-item label-width="80px" label="转出账户">
 					<el-select v-model="transferReq.pay_account">
 						<el-option :key="item.id" :label="item.name" :value="item.id" v-for="item in accountList"></el-option>
 					</el-select>
@@ -331,9 +322,9 @@
 			showTop(type){
 				this.showTopUp = true;
 				if(type == '1'){
-					this.useTxt = "银行卡"
+					this.useTxt = "银行卡通道充值"
 				}else{
-					this.useTxt = "支付宝"
+					this.useTxt = "支付宝通道充值"
 				}
 			},
 			//转账
@@ -361,6 +352,7 @@
 					resource.transfer(this.transferReq).then(res => {
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
+							this.showTransfer = false;
 							//获取顶部信息
 							this.getStoreInfo();
 						}else{

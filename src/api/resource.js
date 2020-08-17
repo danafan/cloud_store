@@ -1,10 +1,11 @@
 import http from './request.js'
 let path = {	
-	login:'storeadmin/login',										//登录
-	quit:'storeadmin/quit',											//退出登录
-	getCaptcha:'storeadmin/captcha',								//获取手机号验证码
-	index:"index/index",												//账户概览和待处理事务
-	accountInfo:"index/accountInfo",									//首页业务概览
+	getmainmenus:'storeadmin/mymenulist',					//获取所有主菜单
+	login:'storeadmin/login',									//登录
+	quit:'storeadmin/quit',										//退出登录
+	getCaptcha:'storeadmin/captcha',							//获取手机号验证码
+	index:"index/index",										//账户概览和待处理事务
+	accountInfo:"index/accountInfo",							//首页业务概览
 	letterslist:'message/letterslist',							//函件通知列表
 	getLetters:'message/getletters',							//函件详情
 	noticelist:'message/noticelist',							//系统公告
@@ -47,30 +48,35 @@ let path = {
 	editInfo:'user/editinfo',									//修改用户信息
 	userDownLoad:'user/download',								//下载签约用户模版
 	userUpload:'user/upload',									//上传邀请签约的用户	
-	storeSub:'store/getstoresubscription',									//商户签约信息
+	storeSub:'store/getstoresubscription',						//商户签约信息
 	storeRemind:'store/getstoreremind',							//商户提醒设置信息
 	statistics:'daystatistics/index',							//商户数据
-	taxIndex:'persionaltax/index',										//个税扣缴明细
-	taxDownload:'tax/download',									//下载个税明细
-	invoiceStep1:'invoice/addstep1',								//申请发票第一步
-	imageShow:'invoice/createimage',								//生成图片预览
-	step2Invoice:'invoice/addstep2',								//申请发票第二步
-	adminIndex:'storeadmin/index',										//管理员列表
-	getaccesslist:'storeaccess/getaccesslist',							//获取权限列表（添加或修改角色）
-	adminAdd:'storeadmin/add',											//创建普通管理员接口
-	adminEdit:'storeadmin/edit',											//编辑普通管理员
-	adminStartStop:'storeadmin/startstop',								//管理员设置
-	getMainMenus:'storeadmin/menulist',								//获取所有主菜单
-	getControllers:'storeaccess/getControllers',							//获取所有控制器
-	getMethods:'storeaccess/getmethods',									//获取某控制器中所有方法
-	accessList:'storeaccess/accesslist',									//获取权限列表（单独页面展示使用）
-	getaccessinfo:'storeaccess/getinfo',									//权限信息获取
-	delaccess:'storeaccess/del',											//权限删除
-	addaccess:'storeaccess/addaccess',											//权限添加
-	editaccess:'storeaccess/edit',										//权限修改
+	taxIndex:'persionaltax/index',								//个税扣缴明细
+	taxDownload:'persionaltax/download',						//下载个税明细
+	invoiceStep1:'invoice/addstep1',							//申请发票第一步
+	imageShow:'invoice/createimage',							//生成图片预览
+	step2Invoice:'invoice/addstep2',							//申请发票第二步
+	adminIndex:'storeadmin/index',								//管理员列表
+	getaccesslist:'storeaccess/getaccesslist',					//获取权限列表（添加或修改角色）
+	adminAdd:'storeadmin/add',									//创建普通管理员接口
+	adminEdit:'storeadmin/edit',								//编辑普通管理员
+	adminEditGet:'storeadmin/edit',									//编辑普通管理员
+	adminStartStop:'storeadmin/startstop',						//管理员设置
+	getMainMenus:'storeaccess/getmainmenus',							//获取所有主菜单
+	getControllers:'storeaccess/getControllers',				//获取所有控制器
+	getMethods:'storeaccess/getmethods',						//获取某控制器中所有方法
+	accessList:'storeaccess/accesslist',						//获取权限列表（单独页面展示使用）
+	getaccessinfo:'storeaccess/getinfo',						//权限信息获取
+	delaccess:'storeaccess/del',								//权限删除
+	addaccess:'storeaccess/add',							//权限添加
+	editaccess:'storeaccess/edit',								//权限修改
 
 }				
 export default{
+	//获取所有主菜单
+	getmainmenus(params){
+		return http.get(path.getmainmenus, params)
+	},
 	//登录
 	login(params){
 		return http.post(path.login, params)
@@ -313,7 +319,7 @@ export default{
 	},
 	//编辑普通管理员接口(get)
 	adminEditGet(params){
-		return http.get(path.adminEdit, params)
+		return http.get(path.adminEditGet, params)
 	},
 	//管理员设置
 	adminStartStop(params){
@@ -341,7 +347,7 @@ export default{
 	},
 	//权限删除
 	delaccess(params){
-		return http.get(path.delaccess, params)
+		return http.post(path.delaccess, params)
 	},
 	//权限添加
 	addaccess(params){
@@ -349,7 +355,7 @@ export default{
 	},
 	//权限修改
 	editaccess(params){
-		return http.post(path.addaccess, params)
+		return http.post(path.editaccess, params)
 	},
 }
 

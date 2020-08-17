@@ -18,16 +18,22 @@
 			<el-button type="primary" size="small" @click="getList">搜索</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
-		<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
 			<el-table-column width="300" prop="created_time" label="日期" align="center">
 			</el-table-column>
-			<el-table-column prop="title" label="标题" align="center">
+			<el-table-column label="标题" align="center">
+				<template slot-scope="scope">
+					<div class="box">
+						<div>{{scope.row.title}}</div>
+						<div class="dian" v-if="scope.row.read == 0"></div>
+					</div>
+				</template>
 			</el-table-column>
 			<el-table-column prop="notice_type" label="通知类型" align="center">
 			</el-table-column>
 			<el-table-column width="150" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="orderDetail(scope.row.id)">查看</el-button>
+					<el-button type="text" size="small" @click="getNotice(scope.row.id)">查看</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -57,7 +63,18 @@ width="30%">
 </div>
 </template>
 <style lang="less" scoped>
-
+.box{
+	position: relative;
+}
+.dian{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: red;
+}
 </style>
 <script>
 	import resource from '../../api/resource.js'
@@ -83,8 +100,8 @@ width="30%">
 		watch:{
 			//时间
 			date:function(n){
-				this.req.created_time_start = n?n[0]:"";
-				this.req.created_time_end = n?n[1]:"";
+				this.req.created_time_start = n && n.length> 0?n[0]:"";
+				this.req.created_time_end = n && n.length> 0?n[1]:"";
 			}
 		},
 		methods:{

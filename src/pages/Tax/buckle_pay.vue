@@ -23,7 +23,10 @@
 			</el-table-column>
 			<el-table-column prop="service_subject_name" label="综合服务主体" align="center">
 			</el-table-column>
-			<el-table-column prop="store_name" label="扣缴明细名称" align="center">
+			<el-table-column label="扣缴明细名称" align="center">
+				<template slot-scope="scope">
+					<span>{{scope.row.service_subject_name}}_{{scope.row.tax_day}}_个人所得税扣缴明细表</span>
+				</template>
 			</el-table-column>
 			<el-table-column prop="email" label="接收扣缴明细解压密码邮箱" align="center">
 			</el-table-column>
@@ -32,7 +35,10 @@
 					<span>{{scope.row.status == 0 ? '未下载' : '已下载'}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="title" label="下载信息" align="center">
+			<el-table-column label="下载信息" align="center">
+				<template slot-scope="scope">
+					<div v-for="item in scope.row.download_log">{{item}}</div>
+				</template>
 			</el-table-column>
 			<el-table-column width="150" label="操作" align="center">
 				<template slot-scope="scope">
@@ -80,8 +86,8 @@
 		watch:{
 			//时间
 			date:function(n){
-				this.req.start_time = n?n[0]:"";
-				this.req.end_time = n?n[1]:"";
+				this.req.start_time = n && n.length> 0?n[0]:"";
+				this.req.end_time = n && n.length> 0?n[1]:"";
 			}
 		},
 		methods:{
@@ -97,7 +103,7 @@
 			},
 			//下载
 			down(id){
-				resource.taxDownload().then(res => {
+				resource.taxDownload({id:id}).then(res => {
 					if(res.data.code == 1){
 						let url = res.data.data.url;
 						window.open(url);

@@ -39,7 +39,7 @@
 		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
 			<el-table-column prop="finished_time" label="入账时间" align="center">
 			</el-table-column>
-			<el-table-column prop="store_id" label="商户ID" align="center">
+			<el-table-column prop="store_sn" label="商户ID" align="center">
 			</el-table-column>
 			<el-table-column prop="service_subject_name" label="综合服务主体" align="center">
 			</el-table-column>
@@ -87,7 +87,7 @@
 					page:1,
 					pagesize:10,
 					finished_time_start:"",
-					finished_time_start:"",
+					finished_time_end:"",
 					bill_id:"",
 					sorder_sn:"",
 					business_type:"0",
@@ -140,9 +140,8 @@
 		watch:{
 			//入账时间
 			date:function(n){
-				this.req.finished_time_start = n?n[0]:"";
-					finished_time_start:"",
-				this.req.finished_time_end = n?n[1]:"";
+				this.req.finished_time_start = n && n.length> 0?n[0]:"";
+				this.req.finished_time_end = n && n.length> 0?n[1]:"";
 			}
 		},
 		methods:{
@@ -163,7 +162,7 @@
 					page:1,
 					pagesize:10,
 					finished_time_start:"",
-					finished_time_start:"",
+					finished_time_end:"",
 					bill_id:"",
 					sorder_sn:"",
 					business_type:"0",

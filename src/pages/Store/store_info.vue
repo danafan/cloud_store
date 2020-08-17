@@ -14,8 +14,8 @@
 			</div>
 			<div class="info_row">
 				<div class="row_item">
-					<div>反馈材料</div>
-					<img src="../../assets/pink_¥.png">
+					<div>营业执照影印件</div>
+					<img :src="storeInfoObj.business_license_img">
 				</div>
 				
 			</div>
@@ -38,11 +38,8 @@
 				<div class="title_txt">结算信息</div>
 			</div>
 			<div class="info_row">
-				<div class="row_item">开户名称：{{storeInfoObj.service_subject_name}}</div>
+				<div class="row_item">开户名称：{{storeInfoObj.enterprise_name}}</div>
 				<div class="row_item">对公账号：{{storeInfoObj.open_bank_account}}</div>
-			</div>
-			<div class="info_row">
-				开户银行：{{storeInfoObj.open_bank_name}}
 			</div>
 		</el-card>
 		<el-card style="margin-top: 24px;">

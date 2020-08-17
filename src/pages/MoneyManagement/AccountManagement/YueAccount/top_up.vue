@@ -32,8 +32,6 @@
 		</el-table-column>
 		<el-table-column width="150" prop="money" label="充值金额（元）" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="reality_money" label="实际到账金额（元）" align="center">
-		</el-table-column>
 		<el-table-column width="150" label="充值类型" align="center">
 			<template slot-scope="scope">
 				<span>{{scope.row.business_type2 | orderStatus(money_use_list)}}</span>
@@ -101,14 +99,14 @@
 		watch:{
 			//入账时间
 			date:function(n){
-				this.req.finished_time_start = n?n[0]:"";
-				this.req.finished_time_end = n?n[1]:"";
+				this.req.finished_time_start = n && n.length> 0?n[0]:"";
+				this.req.finished_time_end = n && n.length> 0?n[1]:"";
 			}
 		},
 		methods:{
 			//充值记录列表
 			getList(){
-				resource.rechargeRecord().then(res => {
+				resource.rechargeRecord(this.req).then(res => {
 					if(res.data.code == 1){
 						this.dataObj = res.data.data;
 					}else{

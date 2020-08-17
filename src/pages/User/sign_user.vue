@@ -12,13 +12,13 @@
 					<el-input v-model="req.phone" placeholder="请输入"></el-input>
 				</el-form-item>
 				<el-form-item label="信息校验状态：">
-					<el-select v-model="req.info_status" clearable>
+					<el-select v-model="req.info_status">
 						<el-option v-for="item in info_status_list" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="签约状态：">
-					<el-select v-model="req.sign_status" clearable>
+					<el-select v-model="req.sign_status">
 						<el-option v-for="item in sign_status_list" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
@@ -49,7 +49,7 @@
 	<div class="huajian">
 		<el-button type="primary" size="small" icon="el-icon-upload" @click="uploadSign = true">上传签约用户信息</el-button>
 		<div class="but">
-			<el-button type="primary" size="small" @click="getList">搜索</el-button>
+			<el-button type="primary" size="small" @click="invitationSignList">搜索</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 	</div>
@@ -98,7 +98,7 @@
 		<el-form-item label="下载模版：" required>
 			<div class="down_box" @click="downTemp">
 				<img class="down_icon" src="../../assets/down_icon.png">
-				<div class="down_txt">下载打款模版</div>
+				<div class="down_txt">下载模版</div>
 			</div>
 		</el-form-item>
 		<el-form-item label="上传文件：" required>
@@ -224,7 +224,7 @@
 					id_card_no:"",
 					phone:"",
 					info_status:"-1",
-					sign_status:"",
+					sign_status:"-1",
 					created_time_start:"",
 					created_time_end:"",
 					updated_time_start:"",
@@ -286,13 +286,13 @@
 		watch:{
 			//创建时间
 			create_date:function(n){
-				this.req.created_time_start = n?n[0]:"";
-				this.req.created_time_end = n?n[1]:"";
+				this.req.created_time_start = n && n.length> 0?n[0]:"";
+				this.req.created_time_end = n && n.length> 0?n[1]:"";
 			},
 			//更新时间
 			update_date:function(n){
-				this.req.updated_time_start = n?n[0]:"";
-				this.req.updated_time_end = n?n[1]:"";
+				this.req.updated_time_start = n && n.length> 0?n[0]:"";
+				this.req.updated_time_end = n && n.length> 0?n[1]:"";
 			}
 		},
 		methods:{
@@ -328,12 +328,12 @@
 			handleSizeChange(val) {
 				this.req.pagesize = val;
 				//获取列表
-				this.getList();
+				this.invitationSignList();
 			},
 			handleCurrentChange(val) {
 				this.req.page = val;
 				//获取列表
-				this.getList();
+				this.invitationSignList();
 			},
 			//修改信息
 			edit(id){
@@ -394,6 +394,8 @@
 					resource.userUpload({invitation_user:this.fileObj}).then(res => {
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
+							//获取列表
+							this.invitationSignList();
 							this.uploadSign = false;
 						}else{
 							this.$message.warning(res.data.msg);

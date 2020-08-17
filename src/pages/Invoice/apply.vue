@@ -117,8 +117,8 @@
 		watch:{
 			//入账时间
 			date:function(n){
-				this.req.start_time = n?n[0]:"";
-				this.req.end_time = n?n[1]:"";
+				this.req.start_time = n && n.length> 0?n[0]:"";
+				this.req.end_time = n && n.length> 0?n[1]:"";
 			}
 		},
 		methods:{

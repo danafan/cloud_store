@@ -67,8 +67,8 @@
 	<!-- 修改信息 -->
 	<el-dialog :title="updateInfoType == '1'?'创建':'编辑'" :visible.sync="updateInfo">
 		<el-form size="small" style="width: 60%;margin: 0 auto">
-			<el-form-item label="登录用户名" label-width="180px" required>
-				<el-input v-model="updateInfoReq.admin_name"></el-input>
+			<el-form-item label="登录用户名" label-width="180px" placeholder="手机号" required>
+				<el-input v-model="updateInfoReq.username"></el-input>
 			</el-form-item>
 			<el-form-item label="密码" label-width="180px" required>
 				<el-input v-model="updateInfoReq.password"></el-input>
@@ -77,16 +77,13 @@
 				<el-input v-model="updateInfoReq.admin_email"></el-input>
 			</el-form-item>
 			<el-form-item label="姓名" label-width="180px" required>
-				<el-input v-model="updateInfoReq.realname"></el-input>
+				<el-input v-model="updateInfoReq.admin_name"></el-input>
 			</el-form-item>
-			<el-form-item label="手机号" label-width="180px" required>
-				<el-input v-model="updateInfoReq.admin_phone"></el-input>
-			</el-form-item>
-			<el-form-item label="备注" label-width="180px" required>
+			<el-form-item label="备注" label-width="180px">
 				<el-input type="textarea"
 				:rows="3" v-model="updateInfoReq.remark"></el-input>
 			</el-form-item>
-			<el-form-item :label="`${item.menu_name}：`" v-for="(item,index) in accessList" v-if="is_super != '1'">
+			<el-form-item :label="`${item.menu_name}：`" v-for="(item,index) in accessList" v-if="is_super != '1' || updateInfoType == '1'">
 				<el-checkbox-group v-model="checkedCities">
 					<el-checkbox :label="child.id" :key="child.id" :value="child.id" v-for="(child,index) in item.access">{{child.access_name}}</el-checkbox>
 				</el-checkbox-group>
@@ -137,11 +134,10 @@
 				updateInfoType:'1',		//1:创建；2:编辑
 				admin_id:"",			//点击的管理员ID
 				updateInfoReq:{
-					admin_name:"",
+					username:"",
 					admin_email:"",
 					password:"",
-					realname:"",
-					admin_phone:"",
+					admin_name:"",
 					remark:""
 				},						//提交的用户信息
 				accessList:[],			//所有的权限列表
@@ -193,10 +189,10 @@
 				this.updateInfoType = '1';
 				this.updateInfo = true;
 				this.updateInfoReq = {
-					admin_name:"",
+					username:"",
 					admin_email:"",
-					realname:"",
-					admin_phone:"",
+					password:"",
+					admin_name:"",
 					remark:""
 				},
 				this.checkedCities = [];
@@ -238,16 +234,14 @@
 			},
 			//提交创建或修改
 			subUpdateInfo(){
-				if(this.updateInfoReq.admin_name == ''){
+				if(this.updateInfoReq.username == ''){
 					this.$message.warning('请输入登录用户名');
 				}else if(this.updateInfoReq.admin_email == ''){
 					this.$message.warning('请输入邮箱');
 				}else if(this.updateInfoReq.password == ''){
 					this.$message.warning('请输入密码');
-				}else if(this.updateInfoReq.realname == ''){
+				}else if(this.updateInfoReq.admin_name == ''){
 					this.$message.warning('请输入姓名');
-				}else if(this.updateInfoReq.admin_phone == ''){
-					this.$message.warning('请输入手机号');
 				}else{
 					this.updateInfoReq.access_ids = this.is_super == '1'?'0':this.checkedCities.join(',');
 					if(this.updateInfoType == '1'){	//创建

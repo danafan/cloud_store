@@ -23,13 +23,9 @@
 	<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
 		<el-table-column width="150" fixed prop="happen_time" label="创建时间" align="center">
 		</el-table-column>
-		<el-table-column prop="updated_time" label="更新时间" align="center">
-		</el-table-column>
 		<el-table-column prop="bill_id" label="转账单号" align="center">
 		</el-table-column>
-		<el-table-column prop="service_subject_name" label="收款商户签约主体" align="center">
-		</el-table-column>
-		<el-table-column prop="service_subject_name" label="付款商户签约主体" align="center">
+		<el-table-column prop="bill_id" label="转账申请人" align="center">
 		</el-table-column>
 		<el-table-column prop="money" label="转账金额（元）" align="center">
 		</el-table-column>
@@ -77,8 +73,8 @@
 		watch:{
 			//入账时间
 			date:function(n){
-				this.req.created_time_start = n?n[0]:"";
-				this.req.created_time_end = n?n[1]:"";
+				this.req.created_time_start = n && n.length> 0?n[0]:"";
+				this.req.created_time_end = n && n.length> 0?n[1]:"";
 			}
 		},
 		methods:{

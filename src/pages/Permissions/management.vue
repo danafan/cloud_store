@@ -104,7 +104,7 @@
 		},
 		watch:{
 			selController:function(n,o){
-				if(n != o){
+				if(n != o && n != ''){
 					//获取所有控制器列表
 					this.getMethod();
 					this.selMethod = "";
@@ -172,7 +172,13 @@
 					menu_id:"",
 					access_codes:""
 				};
+				this.selController = "";		//当前选择的控制器名称
+				this.selMethod = "";			//当前选择的方法名称
 				this.accessCodes = [];
+				//获取所有菜单列表
+			this.getMneu();
+			//获取所有控制器列表
+			this.getController();
 			},
 			//点击某一个关闭
 			handleClose(index){
@@ -182,12 +188,18 @@
 			edior(id){
 				this.id = id;
 				this.dislogType = 2;
+				//获取所有菜单列表
+				this.getMneu();
+				//获取所有控制器列表
+				this.getController();
 				resource.getaccessinfo({id:id}).then(res => {
 					if(res.data.code == 1){
 						this.showDialog = true;
 						this.accessReq.access_name = res.data.data.access_name;
 						this.accessReq.menu_id = res.data.data.menu_id;
 						this.accessCodes = res.data.data.access_codes;
+						this.selController = "";		//当前选择的控制器名称
+						this.selMethod = "";			//当前选择的方法名称
 					}else{
 						this.$message.warning(res.data.msg);
 					}
@@ -233,6 +245,7 @@
 			},
 			//点击弹框的确定
 			submit(){
+				console.log(this.dislogType)
 				if(this.accessReq.access_name == ''){
 					this.$message.warning("请输入权限资源名称");
 				}else if(this.accessReq.menu_id == ''){

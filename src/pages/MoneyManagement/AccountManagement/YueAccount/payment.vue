@@ -29,7 +29,8 @@
 		</el-table-column>
 		<el-table-column prop="money" label="转账金额（元）" align="center">
 		</el-table-column>
-
+		<el-table-column prop="remark" label="备注" align="center">
+		</el-table-column>
 	</el-table>
 	<div class="page">
 		<el-pagination
@@ -72,8 +73,8 @@
 		watch:{
 			//入账时间
 			date:function(n){
-				this.req.created_time_start = n?n[0]:"";
-				this.req.created_time_end = n?n[1]:"";
+				this.req.created_time_start = n && n.length> 0?n[0]:"";
+				this.req.created_time_end = n && n.length> 0?n[1]:"";
 			}
 		},
 		methods:{
