@@ -37,27 +37,27 @@
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column prop="finished_time" label="入账时间" align="center">
+			<el-table-column width="180" prop="happen_time" label="入账时间" align="center">
 			</el-table-column>
-			<el-table-column prop="store_sn" label="商户ID" align="center">
+			<el-table-column width="150" prop="store_sn" label="商户ID" align="center">
 			</el-table-column>
-			<el-table-column prop="service_subject_name" label="综合服务主体" align="center">
+			<el-table-column width="150" prop="service_subject_name" label="综合服务主体" align="center">
 			</el-table-column>
-			<el-table-column prop="order_id" label="平台订单号" align="center">
+			<el-table-column width="150" prop="order_id" label="平台订单号" align="center">
 			</el-table-column>
-			<el-table-column prop="sorder_sn" label="商户订单号" align="center">
+			<el-table-column width="150" prop="sorder_sn" label="商户订单号" align="center">
 			</el-table-column>
-			<el-table-column prop="bill_id" label="资金流水号" align="center">
+			<el-table-column width="150" prop="bill_id" label="资金流水号" align="center">
 			</el-table-column>
-			<el-table-column prop="business_type1" label="业务类型" align="center">
+			<el-table-column width="150" prop="business_type1" label="业务类型" align="center">
 			</el-table-column>
-			<el-table-column prop="business_type2" label="业务子类" align="center">
+			<el-table-column width="180" prop="business_type2" label="业务子类" align="center">
 			</el-table-column>
-			<el-table-column prop="io_type" label="收支类型" align="center">
+			<el-table-column width="150" prop="io_type" label="收支类型" align="center">
 			</el-table-column>
-			<el-table-column prop="money" label="入账金额（元）" align="center">
+			<el-table-column width="150" prop="money" label="入账金额（元）" align="center">
 			</el-table-column>
-			<el-table-column prop="balance" label="账户余额（元）" align="center">
+			<el-table-column width="150" prop="balance" label="账户余额（元）" align="center">
 			</el-table-column>
 		</el-table>
 		<div class="page">

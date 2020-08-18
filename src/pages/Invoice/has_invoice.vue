@@ -25,12 +25,12 @@
 			<el-button type="primary" size="small" @click="exportFile">导出</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
-		<el-table :data="dataObj.data" size="small" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column width="150" prop="invoice_time" label="开票时间" align="center">
+		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+			<el-table-column width="180" prop="invoice_time" label="开票时间" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="invoice_type" label="开票类型" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="invoice_code" label="发票代码" align="center">
+			<el-table-column width="180" prop="invoice_code" label="发票代码" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="invoice_date" label="所属月份" align="center">
 			</el-table-column>
@@ -59,7 +59,7 @@
 					<div v-for="item in scope.row.child_invoice_json">{{item.totalMoney}}</div>
 				</template>
 			</el-table-column>
-			<el-table-column width="150" label="购买方" align="center">
+			<el-table-column width="260" label="购买方">
 				<template slot-scope="scope">
 					<div>名称：{{scope.row.enterprise_name}}</div>
 					<div>纳税人识别号：{{scope.row.taxpayer_id}}</div>
@@ -69,7 +69,7 @@
 			</el-table-column>
 			<el-table-column width="150" prop="remark" label="发票备注" align="center">
 			</el-table-column>
-			<el-table-column width="150" label="操作人信息" align="center">
+			<el-table-column width="150" label="操作人信息">
 				<template slot-scope="scope">
 					<div>收款人：{{scope.row.payee}}</div>
 					<div>复核：{{scope.row.checker}}</div>
@@ -78,7 +78,7 @@
 			</el-table-column>
 			<el-table-column width="150" prop="status_msg" label="作废标志" align="center">
 			</el-table-column>
-			<el-table-column width="150" label="邮寄地址" align="center">
+			<el-table-column width="260" label="邮寄地址">
 				<template slot-scope="scope">
 					<div>收件人姓名：{{scope.row.recieve_user}}</div>
 					<div>联系电话：{{scope.row.recieve_phone}}</div>
@@ -87,7 +87,7 @@
 			</el-table-column>
 			<el-table-column width="150" prop="apply_id" label="发票申请编号" align="center">
 			</el-table-column>
-			<el-table-column fixed="right" width="150" label="操作" align="center">
+			<el-table-column fixed="right" width="100" label="操作" align="center">
 				<template slot-scope="scope">
 					<el-button type="text" size="small" @click="detail(scope.row.picture_url)">查看</el-button>
 				</template>

@@ -12,7 +12,7 @@
 					<el-input type="number" v-model="req.admin_phone" placeholder="请输入"></el-input>
 				</el-form-item>
 				<el-form-item label="联系人邮箱：">
-					<el-input v-model="req.admin_email" placeholder="请输入"></el-input>
+					<el-input v-model="req.email" placeholder="请输入"></el-input>
 				</el-form-item>
 				<el-form-item label="账号状态：">
 					<el-select v-model="req.status" placeholder="不限">
@@ -29,22 +29,20 @@
 				</div>
 			</div>
 			<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-				<el-table-column width="150" prop="admin_name" label="登录用户名" align="center">
+				<el-table-column prop="username" label="登录用户名" align="center">
 				</el-table-column>
-				<el-table-column width="150" prop="access_ids" label="角色权限" align="center">
+				<el-table-column prop="admin_name" label="联系人姓名" align="center">
 				</el-table-column>
-				<el-table-column width="150" prop="realname" label="联系人姓名" align="center">
+				<el-table-column prop="username" label="联系人手机号" align="center">
 				</el-table-column>
-				<el-table-column width="150" prop="admin_phone" label="联系人手机号" align="center">
+				<el-table-column prop="email" label="联系人邮箱" align="center">
 				</el-table-column>
-				<el-table-column width="150" prop="admin_email" label="联系人邮箱" align="center">
-				</el-table-column>
-				<el-table-column width="150" label="账号状态" align="center">
+				<el-table-column label="账号状态" align="center">
 					<template slot-scope="scope">
 						<span>{{scope.row.is_disabled == '1'?'已启用':'已停用'}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column fixed="right" label="操作" align="center">
+				<el-table-column width="150" fixed="right" label="操作" align="center">
 					<template slot-scope="scope">
 						<el-button type="text" size="small" @click="edit(scope.row.admin_id)" v-if="scope.row.is_disabled == '1'">编辑</el-button>
 						<el-button type="text" size="small" @click="setting(scope.row.is_disabled,scope.row.admin_id)">{{scope.row.is_disabled == '1'?'禁用':'启用'}}</el-button>
@@ -67,14 +65,14 @@
 	<!-- 修改信息 -->
 	<el-dialog :title="updateInfoType == '1'?'创建':'编辑'" :visible.sync="updateInfo">
 		<el-form size="small" style="width: 60%;margin: 0 auto">
-			<el-form-item label="登录用户名" label-width="180px" placeholder="手机号" required>
+			<el-form-item label="登录用户名（手机号）" label-width="180px" placeholder="手机号" required>
 				<el-input v-model="updateInfoReq.username"></el-input>
 			</el-form-item>
-			<el-form-item label="密码" label-width="180px" required>
+			<el-form-item label="密码" label-width="180px" required v-if="updateInfoType == '2'">
 				<el-input v-model="updateInfoReq.password"></el-input>
 			</el-form-item>
 			<el-form-item label="邮箱" label-width="180px" required>
-				<el-input v-model="updateInfoReq.admin_email"></el-input>
+				<el-input v-model="updateInfoReq.email"></el-input>
 			</el-form-item>
 			<el-form-item label="姓名" label-width="180px" required>
 				<el-input v-model="updateInfoReq.admin_name"></el-input>
@@ -116,7 +114,7 @@
 					admin_name:"",
 					realname:"",
 					admin_phone:"",
-					admin_email:"",
+					email:"",
 					status:""
 				},				//请求参数
 				status_list:[{
@@ -135,7 +133,7 @@
 				admin_id:"",			//点击的管理员ID
 				updateInfoReq:{
 					username:"",
-					admin_email:"",
+					email:"",
 					password:"",
 					admin_name:"",
 					remark:""
@@ -169,7 +167,7 @@
 					admin_name:"",
 					realname:"",
 					admin_phone:"",
-					admin_email:"",
+					email:"",
 					status:""
 				}
 			},
@@ -190,7 +188,7 @@
 				this.updateInfo = true;
 				this.updateInfoReq = {
 					username:"",
-					admin_email:"",
+					email:"",
 					password:"",
 					admin_name:"",
 					remark:""
@@ -236,10 +234,8 @@
 			subUpdateInfo(){
 				if(this.updateInfoReq.username == ''){
 					this.$message.warning('请输入登录用户名');
-				}else if(this.updateInfoReq.admin_email == ''){
+				}else if(this.updateInfoReq.email == ''){
 					this.$message.warning('请输入邮箱');
-				}else if(this.updateInfoReq.password == ''){
-					this.$message.warning('请输入密码');
 				}else if(this.updateInfoReq.admin_name == ''){
 					this.$message.warning('请输入姓名');
 				}else{
@@ -256,17 +252,22 @@
 							}
 						})
 					}else{	//编辑
-						this.updateInfoReq.id = this.admin_id;
-						resource.adminEdit(this.updateInfoReq).then(res => {
-							if(res.data.code == 1){
-								this.updateInfo = false;
-								this.$message.success(res.data.msg);
-								//获取列表
-								this.getList();
-							}else{
-								this.$message.warning(res.data.msg);
-							}
-						})
+						if(this.updateInfoReq.password == ''){
+							this.$message.warning('请输入密码');
+						}else{
+							this.updateInfoReq.id = this.admin_id;
+							resource.adminEdit(this.updateInfoReq).then(res => {
+								if(res.data.code == 1){
+									this.updateInfo = false;
+									this.$message.success(res.data.msg);
+									//获取列表
+									this.getList();
+								}else{
+									this.$message.warning(res.data.msg);
+								}
+							})
+						}
+						
 					}
 					
 				}

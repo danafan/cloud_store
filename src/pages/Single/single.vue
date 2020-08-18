@@ -50,31 +50,31 @@
 		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
 			<el-table-column width="150" prop="adjust_id" label="调单流水号" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="created_time" label="创建时间" align="center">
+			<el-table-column width="180" prop="created_time" label="创建时间" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="risk_name" label="风险点" align="center">
+			<el-table-column width="200" show-overflow-tooltip prop="risk_name" label="风险点" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="risk_desc" label="调单说明" align="center">
+			<el-table-column width="200" show-overflow-tooltip prop="risk_desc" label="调单说明" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="order_id" label="平台订单号" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="name" label="收款户名" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="feedback_time" label="反馈时间" align="center">
+			<el-table-column width="180" prop="feedback_time" label="反馈时间" align="center">
 			</el-table-column>
 			<el-table-column width="150" label="状态" align="center">
 				<template slot-scope="scope">
 					<span>{{scope.row.feedback_status | feedback}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column width="150" prop="feedback_end_time" label="距离反馈截止日" align="center">
+			<el-table-column width="180" prop="feedback_end_time" label="距离反馈截止日" align="center">
 			</el-table-column>
 			<el-table-column width="150" label="审核结论" align="center">
 				<template slot-scope="scope">
 					<span>{{scope.row.audit_status | audit}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column width="150" prop="audit_desc" label="审核结论说明" align="center">
+			<el-table-column width="200" show-overflow-tooltip prop="audit_desc" label="审核结论说明" align="center">
 			</el-table-column>
 			<el-table-column fixed="right" label="操作" align="center">
 				<template slot-scope="scope">

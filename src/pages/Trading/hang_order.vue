@@ -36,9 +36,9 @@
 		<el-button type="primary" size="small" @click="reset">重置</el-button>
 	</div>
 	<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-		<el-table-column width="150" fixed prop="created_time" label="订单创建时间" align="center">
+		<el-table-column width="180" prop="created_time" label="订单创建时间" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="updated_time" label="最后更改时间" align="center">
+		<el-table-column width="180" prop="updated_time" label="最后更改时间" align="center">
 		</el-table-column>
 		<el-table-column width="150" prop="batch_no" label="批次号" align="center">
 		</el-table-column>
@@ -68,7 +68,7 @@
 		</el-table-column>
 		<el-table-column width="150" prop="remark" label="打款备注" align="center">
 		</el-table-column>
-		<el-table-column width="150" label="订单状态" align="center">
+		<el-table-column width="300" label="订单状态" align="center">
 			<template slot-scope="scope">
 				<span>{{scope.row.order_status1 | orderStatus(order_status)}}</span>
 				<div style="color: red" v-if="scope.row.order_status1 == 2">{{scope.row.order_status2 | orderStatus2}}</div>
@@ -76,7 +76,7 @@
 				<div style="color: red" v-if="scope.row.order_status1 == 2 || scope.row.order_status1 == 3">{{scope.row.status_desc}}</div>
 			</template>
 		</el-table-column>
-		<el-table-column fixed="right" label="操作" align="center">
+		<el-table-column width="180" fixed="right" label="操作" align="center">
 			<template slot-scope="scope">
 				<el-button v-if="judgeQu(scope.row)" type="text" size="small" @click="cancel(scope.row.order_id)">取消打款</el-button>
 				<el-button v-if="judgeInfo(scope.row)" type="text" size="small" @click="getUpdateInfo(scope.row.order_id)">修改信息</el-button>

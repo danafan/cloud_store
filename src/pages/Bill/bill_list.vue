@@ -36,9 +36,9 @@
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column width="150" prop="bill_id" label="账单编号" align="center">
+			<el-table-column width="180" prop="bill_id" label="账单编号" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="add_time" label="账单日期" align="center">
+			<el-table-column width="180" prop="add_time" label="账单日期" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="biil_money" label="账单金额（元）" align="center">
 			</el-table-column>
@@ -48,7 +48,7 @@
 			</el-table-column>
 			<el-table-column width="150" prop="total_service_money" label="服务费金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="deduction_service_money" label="服务费抵扣金额（元）" align="center">
+			<el-table-column width="180" prop="deduction_service_money" label="服务费抵扣金额（元）" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="service_subject_name" label="综合服务主体" align="center">
 			</el-table-column>
@@ -57,7 +57,7 @@
 					<span>{{scope.row.bill_status == '1'?'未出账单':'已出账单'}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column fixed="right" label="操作" align="center">
+			<el-table-column width="180" fixed="right" label="操作" align="center">
 				<template slot-scope="scope">
 					<el-button type="text" size="small" @click="detail(scope.row.bill_id)">详情</el-button>
 					<el-button type="text" size="small" @click="downDetail(scope.row.bill_id)">下载明细</el-button>

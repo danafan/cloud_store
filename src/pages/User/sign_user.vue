@@ -54,13 +54,13 @@
 		</div>
 	</div>
 	<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-		<el-table-column width="150" fixed prop="create_time" label="创建时间" align="center">
+		<el-table-column width="180" fixed prop="create_time" label="创建时间" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="update_time" label="更新时间" align="center">
+		<el-table-column width="180" prop="update_time" label="更新时间" align="center">
 		</el-table-column>
 		<el-table-column width="150" prop="name" label="用户姓名" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="id_card_no" label="证件号码" align="center">
+		<el-table-column width="200" prop="id_card_no" label="证件号码" align="center">
 		</el-table-column>
 		<el-table-column width="150" prop="phone" label="预签约手机号" align="center">
 		</el-table-column>
@@ -68,7 +68,7 @@
 		</el-table-column>
 		<el-table-column width="150" label="信息校验状态" align="center">
 			<template slot-scope="scope">
-				<span>{{scope.row.info_status == 1 ? '信息不匹配' : '校验通过'}}</span>
+				<span>{{scope.row.info_status == 0 ? '信息不匹配' : '校验通过'}}</span>
 			</template>
 		</el-table-column>
 		<el-table-column width="150" prop="sign_status" label="签约状态" align="center">
@@ -102,7 +102,7 @@
 			</div>
 		</el-form-item>
 		<el-form-item label="上传文件：" required>
-			<div class="showimg" v-if="fileObj" @mouseenter="isDel = true" @mouseleave="isDel = false">
+			<div class="showimg" v-if="fileObj.fileName" @mouseenter="isDel = true" @mouseleave="isDel = false">
 				<div class="img">{{fileName}}</div>
 				<div class="modal" v-if="isDel == true">
 					<img src="../../assets/deleteImg.png" @click="detele">

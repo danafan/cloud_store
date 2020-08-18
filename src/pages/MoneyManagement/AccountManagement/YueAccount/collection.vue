@@ -21,11 +21,11 @@
 		<el-button type="primary" size="small" @click="reset">重置</el-button>
 	</div>
 	<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-		<el-table-column width="150" fixed prop="happen_time" label="创建时间" align="center">
+		<el-table-column width="180" fixed prop="happen_time" label="创建时间" align="center">
 		</el-table-column>
 		<el-table-column prop="bill_id" label="转账单号" align="center">
 		</el-table-column>
-		<el-table-column prop="bill_id" label="转账申请人" align="center">
+		<el-table-column prop="applicant" label="转账申请人" align="center">
 		</el-table-column>
 		<el-table-column prop="money" label="转账金额（元）" align="center">
 		</el-table-column>

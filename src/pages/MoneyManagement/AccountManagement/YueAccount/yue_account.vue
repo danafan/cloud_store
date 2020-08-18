@@ -63,8 +63,7 @@
 					>复制</button>
 				</div>
 				<div class="info_row">
-					<div class="row_left">开户银行：</div>
-					
+					<div class="row_left">开户银行：{{accountObj.bank_name}}</div>
 				</div>
 				<div class="info_row">
 					<div class="row_left">专属账户：{{accountObj.bank_no}}</div>

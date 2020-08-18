@@ -19,7 +19,7 @@
 		<el-button type="primary" size="small" @click="exportFile">导出</el-button>
 		<el-button type="primary" size="small" @click="reset">重置</el-button>
 	</div>
-	<el-table :data="dataObj.order_list" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
+	<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
 			<el-table-column width="150" fixed prop="add_time" label="日期" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="enterprise_name" label="公司名称" align="center">
@@ -58,7 +58,7 @@
 			</el-table-column>
 			<el-table-column width="150" prop="deduction_service_money" label="服务费返点使用总额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="store_id" label="商户ID" align="center">
+			<el-table-column width="150" prop="store_sn" label="商户ID" align="center">
 			</el-table-column>
 			<el-table-column width="150" label="C端签约" align="center">
 				<template slot-scope="scope">

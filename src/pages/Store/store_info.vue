@@ -15,7 +15,7 @@
 			<div class="info_row">
 				<div class="row_item">
 					<div>营业执照影印件</div>
-					<img :src="storeInfoObj.business_license_img">
+					<img style="width: 200px;height: 200px;margin-left: 20px" :src="storeInfoObj.business_license_img">
 				</div>
 				
 			</div>

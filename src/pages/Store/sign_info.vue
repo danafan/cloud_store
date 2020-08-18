@@ -5,7 +5,7 @@
 				<div class="title_txt">基本信息</div>
 			</div>
 			<div class="info_row">
-				<div class="row_item">企业名称：{{storeInfoObj.store_name}}</div>
+				<div class="row_item">企业名称：{{storeInfoObj.enterprise_name}}</div>
 				<div class="row_item">综合服务主体：{{storeInfoObj.service_subject_name}}</div>
 			</div>
 			<div class="info_row">

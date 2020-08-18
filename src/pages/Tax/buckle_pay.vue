@@ -19,13 +19,13 @@
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
 		</div>
 		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-			<el-table-column width="300" prop="tax_day" label="所属期" align="center">
+			<el-table-column width="150" prop="tax_day" label="所属期" align="center">
 			</el-table-column>
 			<el-table-column prop="service_subject_name" label="综合服务主体" align="center">
 			</el-table-column>
-			<el-table-column label="扣缴明细名称" align="center">
+			<el-table-column width="300" label="扣缴明细名称" align="center">
 				<template slot-scope="scope">
-					<span>{{scope.row.service_subject_name}}_{{scope.row.tax_day}}_个人所得税扣缴明细表</span>
+					<span>{{scope.row.service_subject_name}}_{{scope.row.store_name}}_个人所得税扣缴明细表</span>
 				</template>
 			</el-table-column>
 			<el-table-column prop="email" label="接收扣缴明细解压密码邮箱" align="center">
@@ -35,14 +35,14 @@
 					<span>{{scope.row.status == 0 ? '未下载' : '已下载'}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="下载信息" align="center">
+			<el-table-column width="300" label="下载信息">
 				<template slot-scope="scope">
 					<div v-for="item in scope.row.download_log">{{item}}</div>
 				</template>
 			</el-table-column>
 			<el-table-column width="150" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="down(scope.row.id)" v-if="scope.row.status == 0">下载明细</el-button>
+					<el-button type="text" size="small" @click="down(scope.row.id)">下载明细</el-button>
 				</template>
 			</el-table-column>
 		</el-table>

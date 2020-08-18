@@ -24,7 +24,7 @@
 		<el-button type="primary" size="small" @click="reset">重置</el-button>
 	</div>
 	<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
-		<el-table-column width="150" prop="finished_time" label="入账时间" align="center">
+		<el-table-column width="180" prop="happen_time" label="入账时间" align="center">
 		</el-table-column>
 		<el-table-column width="150" prop="service_subject_name" label="综合服务主体" align="center">
 		</el-table-column>
