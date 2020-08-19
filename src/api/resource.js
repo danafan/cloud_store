@@ -81,6 +81,10 @@ export default{
 	login(params){
 		return http.post(path.login, params)
 	},
+	//验证登录
+	checkLogin(params){
+		return http.get(path.login, params)
+	},
 	//退出登录
 	quit(params){
 		return http.get(path.quit, params)

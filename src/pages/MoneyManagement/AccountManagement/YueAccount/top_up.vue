@@ -13,7 +13,7 @@
 			</el-date-picker>
 		</el-form-item>
 		<el-form-item label="资金用途：">
-			<el-select v-model="req.money_use" placeholder="不限" clearable>
+			<el-select v-model="req.purpose">
 				<el-option v-for="item in money_use_list" :key="item.id" :label="item.name" :value="item.id">
 				</el-option>
 			</el-select>
