@@ -3,7 +3,7 @@
 		<el-card>
 			<div class="info_title">
 				<div class="title_txt">开票信息</div>
-				<div class="edit_box" @click="editApply">
+				<div class="edit_box" @click="editApply" v-if="invoiceInfo.is_supper == 1 || (invoiceInfo.is_supper == 0 && invoiceInfo.button_list.edit == 1)">
 					<img class="edit_icon" src="../../assets/edit_icon.png">
 					<div class="edit_txt">编辑</div>
 				</div>
@@ -25,7 +25,7 @@
 		<el-card style="margin-top: 24px;">
 			<div class="info_title">
 				<div class="title_txt">邮寄地址</div>
-				<div class="edit_box" @click="editAddress">
+				<div class="edit_box" @click="editAddress" v-if="invoiceInfo.is_supper == 1 || (invoiceInfo.is_supper == 0 && invoiceInfo.button_list.edit == 1)">
 					<img class="edit_icon" src="../../assets/edit_icon.png">
 					<div class="edit_txt">编辑</div>
 				</div>

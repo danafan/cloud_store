@@ -59,8 +59,8 @@
 			</el-table-column>
 			<el-table-column width="180" fixed="right" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="detail(scope.row.bill_id)">详情</el-button>
-					<el-button type="text" size="small" @click="downDetail(scope.row.bill_id)">下载明细</el-button>
+					<el-button type="text" size="small" @click="detail(scope.row.bill_id)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.detail == 1)">详情</el-button>
+					<el-button type="text" size="small" @click="downDetail(scope.row.bill_id)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.downdetail == 1)">下载明细</el-button>
 				</template>
 			</el-table-column>
 		</el-table>

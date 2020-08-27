@@ -27,6 +27,8 @@ let path = {
 	orderDetail:'order/detail',									//订单详情
 	adjustList:'order/adjustlist',								//调单记录
 	adjustDetail:'order/adjustdetail',							//调单记录详情
+	feedback:'order/feedback',									//反馈
+	abandonFeedback:'order/abandonfeedback',					//放弃反馈
 	storeInfo:'store/getstoreinfo',								//商铺信息
 	rechargeRecord:'storebill/rechargerecord',					//充值记录
 	transFerrecord:'storebill/transferrecord',					//转账付款、转账收款账户
@@ -60,15 +62,16 @@ let path = {
 	getaccesslist:'storeaccess/getaccesslist',					//获取权限列表（添加或修改角色）
 	adminAdd:'storeadmin/add',									//创建普通管理员接口
 	adminEdit:'storeadmin/edit',								//编辑普通管理员
-	adminEditGet:'storeadmin/edit',									//编辑普通管理员
+	adminEditGet:'storeadmin/edit',								//编辑普通管理员
 	adminStartStop:'storeadmin/startstop',						//管理员设置
-	getMainMenus:'storeaccess/getmainmenus',							//获取所有主菜单
+	editPassword:'storeadmin/editpassword',						//重置密码
+	getMainMenus:'storeaccess/getmainmenus',					//获取所有主菜单
 	getControllers:'storeaccess/getControllers',				//获取所有控制器
 	getMethods:'storeaccess/getmethods',						//获取某控制器中所有方法
 	accessList:'storeaccess/accesslist',						//获取权限列表（单独页面展示使用）
 	getaccessinfo:'storeaccess/getinfo',						//权限信息获取
 	delaccess:'storeaccess/del',								//权限删除
-	addaccess:'storeaccess/add',							//权限添加
+	addaccess:'storeaccess/add',								//权限添加
 	editaccess:'storeaccess/edit',								//权限修改
 
 }				
@@ -184,6 +187,14 @@ export default{
 	//调单记录详情
 	adjustDetail(params){
 		return http.get(path.adjustDetail, params)
+	},
+	//反馈
+	feedback(params){
+		return http.post(path.feedback, params)
+	},
+	//放弃反馈
+	abandonFeedback(params){
+		return http.post(path.abandonFeedback, params)
 	},
 	//商铺详情
 	storeInfo(params){
@@ -328,6 +339,10 @@ export default{
 	//管理员设置
 	adminStartStop(params){
 		return http.post(path.adminStartStop, params)
+	},
+	//重置密码
+	editPassword(params){
+		return http.post(path.editPassword, params)
 	},
 	//获取所有主菜单
 	getMainMenus(params){

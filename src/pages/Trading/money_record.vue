@@ -53,7 +53,7 @@
 			</el-table-column>
 			<el-table-column fixed="right" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="setting(scope.row.batch_id)">详情</el-button>
+					<el-button type="text" size="small" @click="setting(scope.row.batch_id,scope.row.status)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.detail == 1)">详情</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -171,8 +171,12 @@
 				this.getList();
 			},
 			//操作
-			setting(id){
-				this.$router.push('/money_detail?batch_id=' + id);
+			setting(id,status){
+				if(status == 0 || status == 1){
+					this.$router.push('/batch_money?id=' + id + '&status=' + status);
+				}else{
+					this.$router.push('/money_detail?batch_id=' + id);
+				}
 			}
 		},
 		filters:{

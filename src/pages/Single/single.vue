@@ -78,7 +78,9 @@
 			</el-table-column>
 			<el-table-column fixed="right" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="getDetail(scope.row.adjust_id)">详情</el-button>
+					<el-button type="text" size="small" @click="getDetail(scope.row.adjust_id)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.detail == 1)">详情</el-button>
+					<el-button type="text" size="small" @click="feedBack(scope.row.adjust_id)" v-if="scope.row.feedback_status == 0 && (dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.feedback == 1))">反馈</el-button>
+					<el-button type="text" size="small" @click="giveUp(scope.row.adjust_id)" v-if="scope.row.feedback_status == 0 && (dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.feedback == 1))">放弃反馈</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -95,6 +97,27 @@
 		</el-pagination>
 	</div>
 </el-card>
+<!-- 反馈 -->
+<el-dialog title="反馈" :visible.sync="showFeedback">
+	<el-form size="small" style="width: 60%;margin: 0 auto">
+		<el-form-item label="反馈说明" label-width="130px" required>
+			<el-input v-model="feedbackReq.feedback_desc"></el-input>
+		</el-form-item>
+		<el-form-item label="反馈说明" label-width="130px" required>
+			<div class="showimg" v-if="feedbackReq.feedback_material" @mouseenter="isDel = true" @mouseleave="isDel = false">
+				<img class="img" :src="feekback_img">
+				<div class="modal" v-if="isDel == true">
+					<img src="../../assets/deleteImg.png" @click="detele">
+				</div>
+			</div>
+			<upload-file @callbackFn="callbackFn" v-else></upload-file>
+		</el-form-item>
+	</el-form>
+	<div slot="footer" class="dialog-footer">
+		<el-button @click="showFeedback = false">取 消</el-button>
+		<el-button type="primary" @click="submitFeekBack">确 定</el-button>
+	</div>
+</el-dialog>
 </div>
 </template>
 <style lang="less" scoped>
@@ -107,9 +130,44 @@
 	font-size: 14px;
 	color: #666666;
 }
+.showimg{
+	position: relative;
+	width: 200px;
+	height: 200px;
+	.img{
+		border:1px solid #D9D9D9;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 12px;
+		padding-right: 20px;
+		padding-left: 20px;
+	}
+	.modal{
+		background: rgba(0,0,0,.6);
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		img{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%);
+			display:block;
+			width: 30px;
+			height: 30px;
+		}
+	}
+}
 </style>
 <script>
 	import resource from '../../api/resource.js'
+	import uploadFile from '../../components/Upload.vue'
 	export default{
 		data(){
 			return{
@@ -157,6 +215,14 @@
 				}],					//订单状态
 				date:[],	//订单创建时间
 				dataObj:{},	
+				showFeedback:false,
+				feedbackReq:{
+					feedback_desc:"",
+					feedback_material:null
+				},
+				feekback_img:"",
+				isDel:false,
+				adjust_id:""
 				
 			}
 		},
@@ -209,9 +275,75 @@
 				//获取列表
 				this.getList();
 			},
-			//操作
+			//上传文件
+			callbackFn(obj){
+				this.feedbackReq.feedback_material = obj;				//传递到后台的银行卡图片对象
+				let fr = new FileReader();
+				let _this = this;
+				fr.onload = function(){
+					_this.feekback_img = this.result;//预览的银行卡图片地址
+				};
+				fr.readAsDataURL(obj);
+			},
+			//删除文件
+			detele(){
+				this.feekback_img = "";
+				this.feedbackReq.feedback_material = null;
+			},
+			//放弃反馈
+			giveUp(adjust_id){
+				this.$confirm('放弃反馈后将变为风险成立！', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					resource.abandonFeedback({adjust_id:adjust_id}).then(res => {
+						if(res.data.code == 1){
+							this.$message.success(res.data.msg);
+							//获取列表
+							this.getList();
+						}else{
+							this.$message.warning(res.data.msg);
+						}
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '取消退出'
+					});          
+				});
+			},
+			//详情
 			getDetail(id){
-				this.$router.push("/single_detail?adjust_id = " + id);
+				this.$router.push("/single_detail?adjust_id=" + id);
+			},
+			//反馈
+			feedBack(adjust_id){
+				this.adjust_id = adjust_id;
+				this.showFeedback = true;
+				this.feedbackReq = {
+					feedback_desc:"",
+					feedback_material:null
+				}
+			},
+			//提交反馈
+			submitFeekBack(){
+				if(this.feedbackReq.feedback_desc == ''){
+					this.$message.warning("请输入反馈说明!");
+				}else if(!this.feedbackReq.feedback_material){
+					this.$message.warning("请上传反馈材料!");
+				}else{
+					this.feedbackReq.adjust_id = this.adjust_id;
+					resource.feedback(this.feedbackReq).then(res => {
+						if(res.data.code == 1){
+							this.$message.success(res.data.msg);
+							//获取列表
+							this.getList();
+						}else{
+							this.$message.warning(res.data.msg);
+						}
+					})
+				}
 			}
 		},
 		filters:{
@@ -237,6 +369,9 @@
 					return '风险存疑'
 				}
 			},
+		},
+		components:{
+			uploadFile
 		}
 	}
 </script>

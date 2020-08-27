@@ -3,13 +3,10 @@
 		<el-card>
 			<el-form :inline="true" size="small" class="demo-form-inline">
 				<el-form-item label="登录用户名：">
-					<el-input v-model="req.admin_name" placeholder="请输入"></el-input>
+					<el-input v-model="req.username" placeholder="请输入"></el-input>
 				</el-form-item>
 				<el-form-item label="联系人姓名：">
-					<el-input v-model="req.realname" placeholder="请输入"></el-input>
-				</el-form-item>
-				<el-form-item label="联系人手机号：">
-					<el-input type="number" v-model="req.admin_phone" placeholder="请输入"></el-input>
+					<el-input v-model="req.admin_name" placeholder="请输入"></el-input>
 				</el-form-item>
 				<el-form-item label="联系人邮箱：">
 					<el-input v-model="req.email" placeholder="请输入"></el-input>
@@ -22,7 +19,7 @@
 				</el-form-item>
 			</el-form>
 			<div class="huajian">
-				<el-button type="primary" size="small" icon="el-icon-upload" @click="create">创建</el-button>
+				<el-button type="primary" size="small" icon="el-icon-upload" @click="create" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.add == 1)">创建</el-button>
 				<div class="but">
 					<el-button type="primary" size="small" @click="getList">搜索</el-button>
 					<el-button type="primary" size="small" @click="reset">重置</el-button>
@@ -44,8 +41,9 @@
 				</el-table-column>
 				<el-table-column width="150" fixed="right" label="操作" align="center">
 					<template slot-scope="scope">
-						<el-button type="text" size="small" @click="edit(scope.row.admin_id)" v-if="scope.row.is_disabled == '1'">编辑</el-button>
-						<el-button type="text" size="small" @click="setting(scope.row.is_disabled,scope.row.admin_id)">{{scope.row.is_disabled == '1'?'禁用':'启用'}}</el-button>
+						<el-button type="text" size="small" @click="edit(scope.row.admin_id)" v-if="scope.row.is_disabled == '1' && (dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.edit == 1))">编辑</el-button>
+						<el-button type="text" size="small" @click="setting(scope.row.is_disabled,scope.row.admin_id)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.startstop == 1)">{{scope.row.is_disabled == '1'?'禁用':'启用'}}</el-button>
+						<el-button type="text" size="small" @click="resetPw(scope.row.admin_id)" v-if="scope.row.is_disabled == '1' && (dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.editpassword == 1))">重置密码</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -67,9 +65,6 @@
 		<el-form size="small" style="width: 60%;margin: 0 auto">
 			<el-form-item label="登录用户名（手机号）" label-width="180px" placeholder="手机号" required>
 				<el-input v-model="updateInfoReq.username"></el-input>
-			</el-form-item>
-			<el-form-item label="密码" label-width="180px" required v-if="updateInfoType == '2'">
-				<el-input v-model="updateInfoReq.password"></el-input>
 			</el-form-item>
 			<el-form-item label="邮箱" label-width="180px" required>
 				<el-input v-model="updateInfoReq.email"></el-input>
@@ -111,9 +106,8 @@
 				req:{
 					page:1,
 					pagesize:10,
+					username:"",
 					admin_name:"",
-					realname:"",
-					admin_phone:"",
 					email:"",
 					status:""
 				},				//请求参数
@@ -134,7 +128,6 @@
 				updateInfoReq:{
 					username:"",
 					email:"",
-					password:"",
 					admin_name:"",
 					remark:""
 				},						//提交的用户信息
@@ -164,9 +157,8 @@
 				this.req = {
 					page:1,
 					pagesize:10,
+					username:"",
 					admin_name:"",
-					realname:"",
-					admin_phone:"",
 					email:"",
 					status:""
 				}
@@ -189,7 +181,6 @@
 				this.updateInfoReq = {
 					username:"",
 					email:"",
-					password:"",
 					admin_name:"",
 					remark:""
 				},
@@ -252,24 +243,18 @@
 							}
 						})
 					}else{	//编辑
-						if(this.updateInfoReq.password == ''){
-							this.$message.warning('请输入密码');
-						}else{
-							this.updateInfoReq.id = this.admin_id;
-							resource.adminEdit(this.updateInfoReq).then(res => {
-								if(res.data.code == 1){
-									this.updateInfo = false;
-									this.$message.success(res.data.msg);
-									//获取列表
-									this.getList();
-								}else{
-									this.$message.warning(res.data.msg);
-								}
-							})
-						}
-						
+						this.updateInfoReq.id = this.admin_id;
+						resource.adminEdit(this.updateInfoReq).then(res => {
+							if(res.data.code == 1){
+								this.updateInfo = false;
+								this.$message.success(res.data.msg);
+								//获取列表
+								this.getList();
+							}else{
+								this.$message.warning(res.data.msg);
+							}
+						})
 					}
-					
 				}
 			},
 			//设置
@@ -280,6 +265,29 @@
 					type: 'warning'
 				}).then(() => {
 					resource.adminStartStop({status:status == '1'?'0':'1',id:id}).then(res => {
+						if(res.data.code == 1){
+							this.$message.success(res.data.msg);
+							//获取列表
+							this.getList();
+						}else{
+							this.$message.warning(res.data.msg);
+						}
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '取消'
+					});          
+				});
+			},
+			//重置密码
+			resetPw(id){
+				this.$confirm('确认重置密码？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					resource.editPassword({id:id}).then(res => {
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
 							//获取列表

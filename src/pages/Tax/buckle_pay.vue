@@ -42,7 +42,7 @@
 			</el-table-column>
 			<el-table-column width="150" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="down(scope.row.id)">下载明细</el-button>
+					<el-button type="text" size="small" @click="down(scope.row.id)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.download == 1)">下载明细</el-button>
 				</template>
 			</el-table-column>
 		</el-table>

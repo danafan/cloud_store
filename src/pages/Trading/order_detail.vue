@@ -10,7 +10,7 @@
 					<div class="column_item">综合服务主体：{{orderDetail.service_subject_name}}</div>
 				</div>
 				<div class="column">
-					<div class="column_item">订单状态：{{orderDetail.order_status1 | orderStatus(orderStatus)}}</div>
+					<div class="column_item">订单状态：{{orderDetail.order_status1 | orderStatus(order_status)}}</div>
 					<div class="column_item">订单创建时间：{{orderDetail.created_time}}</div>
 					<div class="column_item">打款凭证：{{orderDetail.pay_voucher}}</div>
 				</div>

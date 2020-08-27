@@ -441,13 +441,13 @@
 					fileObj:null,	
 				},						//第一步上传的数据
 				fileName:"",			//上传之后的文件名
-				batch_id:"1",			//第二步批次信息参数
 				batch_info:{},			//批次信息
 				orderReq:{
 					page:1,
 					pagesize:10,
 					name:"",
 					phone:"",
+					batch_id:"",
 					id_card_no:"",
 					order_status:"0",
 				},						//第二步获取列表参数
@@ -505,10 +505,10 @@
 			}
 		},
 		created(){
-			//获取第二步信息
-			this.batchInfo();
-			//批次订单列表（下面）
-			this.batchOrderList();
+			if(this.$route.query.id){
+				this.orderReq.batch_id = this.$route.query.id;
+				this.current_step = parseInt(this.$route.query.status) + 2;
+			}
 		},
 		watch:{
 			current_step:function(n,o){
@@ -553,7 +553,7 @@
 					}
 					resource.importFile(req).then(res => {
 						if(res.data.code == 1){
-							this.batch_id = res.data.data;
+							this.orderReq.batch_id = res.data.data;
 							this.current_step = this.current_step + 1;
 						}else{
 							this.$message.warning(res.data.msg);
@@ -563,7 +563,7 @@
 			},
 			//获取第二步信息（上面）
 			batchInfo(){
-				resource.batchInfo({batch_id:this.batch_id}).then(res => {
+				resource.batchInfo({batch_id:this.orderReq.batch_id}).then(res => {
 					if(res.data.code == 1){
 						this.batch_info = res.data.data;
 					}else{
@@ -588,7 +588,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					resource.lockBatch({batch_id:this.batch_id}).then(res => {
+					resource.lockBatch({batch_id:this.orderReq.batch_id}).then(res => {
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
 							this.current_step = this.current_step + 2;
@@ -609,7 +609,7 @@
 					this.$message.warning("请输入支付密码");
 				}else{
 					let req = {
-						batch_id:this.batch_id,
+						batch_id:this.orderReq.batch_id,
 						pay_pwd:this.pay_password
 					}
 					resource.pay(req).then(res => {
@@ -629,7 +629,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					resource.cancelBatch({batch_id:this.batch_id}).then(res => {
+					resource.cancelBatch({batch_id:this.orderReq.batch_id}).then(res => {
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
 							this.$router.push('/money_record');
@@ -785,7 +785,7 @@
 			},
 			//详情
 			getDetail(){
-				this.$router.push('/money_detail?batch_id=' + this.batch_id);
+				this.$router.push('/money_detail?batch_id=' + this.orderReq.batch_id);
 			}
 		},
 		filters:{

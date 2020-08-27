@@ -64,6 +64,11 @@
 				</div>
 				<div class="info_row">
 					<div class="row_left">开户银行：{{accountObj.bank_name}}</div>
+					<button type="button" 
+					class="copy" 
+					v-clipboard:copy="accountObj.bank_name"
+					v-clipboard:success="onCopy"
+					>复制</button>
 				</div>
 				<div class="info_row">
 					<div class="row_left">专属账户：{{accountObj.bank_no}}</div>

@@ -78,10 +78,10 @@
 		</el-table-column>
 		<el-table-column width="180" fixed="right" label="操作" align="center">
 			<template slot-scope="scope">
-				<el-button v-if="judgeQu(scope.row)" type="text" size="small" @click="cancel(scope.row.order_id)">取消打款</el-button>
-				<el-button v-if="judgeInfo(scope.row)" type="text" size="small" @click="getUpdateInfo(scope.row.order_id)">修改信息</el-button>
-				<el-button v-if="judgeMoney(scope.row)" type="text" size="small" @click="getUpdateMoney(scope.row.order_id)">修改金额</el-button>
-				<el-button v-if="judgeDetail(scope.row)" type="text" size="small" @click="getDetail(scope.row.order_id)">详情</el-button>
+				<el-button v-if="judgeQu(scope.row) && (dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.cancle == 1))" type="text" size="small" @click="cancel(scope.row.order_id)">取消打款</el-button>
+				<el-button v-if="judgeInfo(scope.row) && (dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.edit == 1))" type="text" size="small" @click="getUpdateInfo(scope.row.order_id)">修改信息</el-button>
+				<el-button v-if="judgeMoney(scope.row) && (dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.editmoney == 1))" type="text" size="small" @click="getUpdateMoney(scope.row.order_id)">修改金额</el-button>
+				<el-button v-if="judgeDetail(scope.row) && (dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.detail == 1))" type="text" size="small" @click="getDetail(scope.row.order_id)">详情</el-button>
 			</template>
 		</el-table-column>
 	</el-table>

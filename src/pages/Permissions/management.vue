@@ -2,7 +2,7 @@
 	<div>
 		<el-card>
 			<div class="but">
-				<el-button type="primary" icon="el-icon-download" size="small" @click="addAccess">添加权限</el-button>
+				<el-button type="primary" icon="el-icon-download" size="small" @click="addAccess" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.add == 1)">添加权限</el-button>
 			</div>
 			<el-table :data="dataObj.data" border style="width: 100%" align="center" :header-cell-style="{'background':'#f4f4f4'}">
 				<el-table-column width="200" prop="access_name" label="名称" align="center">
@@ -13,8 +13,8 @@
 				</el-table-column>
 				<el-table-column width="200" label="操作" align="center">
 					<template slot-scope="scope">
-						<el-button type="text" size="small" @click="edior(scope.row.id)">编辑</el-button>
-						<el-button type="text" size="small" @click="deleteIs(scope.row.id)">删除</el-button>
+						<el-button type="text" size="small" @click="edior(scope.row.id)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.edit == 1)">编辑</el-button>
+						<el-button type="text" size="small" @click="deleteIs(scope.row.id)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.del == 1)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -95,10 +95,6 @@
 			}
 		},
 		created(){
-			//获取所有菜单列表
-			this.getMneu();
-			//获取所有控制器列表
-			this.getController();
 			//获取列表
 			this.getList();
 		},
@@ -176,9 +172,9 @@
 				this.selMethod = "";			//当前选择的方法名称
 				this.accessCodes = [];
 				//获取所有菜单列表
-			this.getMneu();
-			//获取所有控制器列表
-			this.getController();
+				this.getMneu();
+				//获取所有控制器列表
+				this.getController();
 			},
 			//点击某一个关闭
 			handleClose(index){

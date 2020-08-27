@@ -47,7 +47,7 @@
 		</el-form-item>
 	</el-form>
 	<div class="huajian">
-		<el-button type="primary" size="small" icon="el-icon-upload" @click="uploadSign = true">上传签约用户信息</el-button>
+		<el-button type="primary" size="small" icon="el-icon-upload" @click="uploadUserInfo()" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.upload == 1)">上传签约用户信息</el-button>
 		<div class="but">
 			<el-button type="primary" size="small" @click="invitationSignList">搜索</el-button>
 			<el-button type="primary" size="small" @click="reset">重置</el-button>
@@ -64,7 +64,7 @@
 		</el-table-column>
 		<el-table-column width="150" prop="phone" label="预签约手机号" align="center">
 		</el-table-column>
-		<el-table-column width="150" prop="overseas_user" label="是否是海外或港澳台用户" align="center">
+		<el-table-column width="200" prop="overseas_user" label="是否是海外或港澳台用户" align="center">
 		</el-table-column>
 		<el-table-column width="150" label="信息校验状态" align="center">
 			<template slot-scope="scope">
@@ -75,7 +75,7 @@
 		</el-table-column>
 		<el-table-column fixed="right" label="操作" align="center">
 			<template slot-scope="scope">
-				<el-button type="text" size="small" @click="edit(scope.row.invitation_id)">修改信息</el-button>
+				<el-button type="text" size="small" @click="edit(scope.row.invitation_id,scope.row.info_status)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.edit == 1)">修改信息</el-button>
 			</template>
 		</el-table-column>
 	</el-table>
@@ -102,7 +102,7 @@
 			</div>
 		</el-form-item>
 		<el-form-item label="上传文件：" required>
-			<div class="showimg" v-if="fileObj.fileName" @mouseenter="isDel = true" @mouseleave="isDel = false">
+			<div class="showimg" v-if="fileObj" @mouseenter="isDel = true" @mouseleave="isDel = false">
 				<div class="img">{{fileName}}</div>
 				<div class="modal" v-if="isDel == true">
 					<img src="../../assets/deleteImg.png" @click="detele">
@@ -121,21 +121,21 @@
 	</div>
 </el-dialog>
 <!-- 修改信息 -->
-<el-dialog title="编辑开票信息" :visible.sync="updateInfo">
+<el-dialog title="编辑用户信息" :visible.sync="updateInfo">
 	<el-form size="small" style="width: 60%;margin: 0 auto">
 		<el-form-item label="用户姓名" label-width="180px" required>
-			<el-input v-model="updateInfoReq.name"></el-input>
+			<el-input v-model="updateInfoReq.name" :disabled="info_status == 1"></el-input>
 		</el-form-item>
 		<el-form-item label="证件号码" label-width="180px" required>
-			<el-input v-model="updateInfoReq.id_card_no"></el-input>
+			<el-input v-model="updateInfoReq.id_card_no" :disabled="info_status == 1"></el-input>
 		</el-form-item>
 		<el-form-item label="预签约手机号" label-width="180px" required>
 			<el-input v-model="updateInfoReq.phone"></el-input>
 		</el-form-item>
 		<el-form-item label="是否海外或港澳台用户" label-width="180px" required>
 			<el-radio-group v-model="updateInfoReq.overseas_user">
-				<el-radio label="0">否</el-radio>
-				<el-radio label="1">是</el-radio>
+				<el-radio :label="0">否</el-radio>
+				<el-radio :label="1">是</el-radio>
 			</el-radio-group>
 		</el-form-item>
 	</el-form>
@@ -268,8 +268,9 @@
 				uploadSign:false,		//上传签约用户信息
 				isDel:false,			//删除图片遮罩
 				fileName:"",
-				fileObj:{},
+				fileObj:null,
 				updateInfo:false,		//修改信息
+				info_status:null,		//校验信息是否通过
 				updateInfoReq:{
 					name:"",
 					id_card_no:"",
@@ -317,7 +318,7 @@
 					id_card_no:"",
 					phone:"",
 					info_status:"-1",
-					sign_status:"",
+					sign_status:"-1",
 					created_time_start:"",
 					created_time_end:"",
 					updated_time_start:"",
@@ -336,7 +337,8 @@
 				this.invitationSignList();
 			},
 			//修改信息
-			edit(id){
+			edit(id,info_status){
+				this.info_status = info_status;
 				resource.getInfo({invitation_id:id}).then(res => {
 					if(res.data.code == 1){
 						this.updateInfo = true;
@@ -358,6 +360,7 @@
 					resource.editInfo(this.updateInfoReq).then(res => {
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
+							this.updateInfo = false;
 							//获取列表
 							this.invitationSignList();
 						}else{
@@ -377,8 +380,18 @@
 					}
 				})
 			},
+			//点击上传用户信息
+			uploadUserInfo(){
+			 	this.uploadSign = true;
+			 	this.fileObj = null;
+			 },
 			//上传文件
 			callbackFn(obj){
+				var reg = /^.*\.(?:xls|xlsx)$/i;//文件名可以带空格
+                if (!reg.test(obj.name)) {//校验不通过
+                    this.$message.warning("请上传xlsx类型的文件");
+                    return;
+                }
 				this.fileName = obj.name;
 				this.fileObj = obj;
 			},
