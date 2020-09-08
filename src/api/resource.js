@@ -44,7 +44,7 @@ let path = {
 	invoiceConfirm:'invoice/confirmleter',						//生成确认函
 	invoiceList:'invoice/invoicelist',							//已开发票列表
 	invoiceInfo:'invoice/storeinvoiceinfo',						//商户开票信息
-	editInvoiceInfo:'invoice/editstoreinvoiceInfo',				//修改商户信息（获取和修改）
+	editInvoiceInfo:'invoice/editstoreinvoiceinfo',				//修改商户信息（获取和修改）
 	invitationSignList:'user/invitationsignlist',				//签约用户列表
 	getInfo:'user/getinfo',										//获取签约用户信息
 	editInfo:'user/editinfo',									//修改用户信息

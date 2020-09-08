@@ -31,7 +31,7 @@ export default {
     obj.secret_key = secret_key;
     let str = "";
     for(var i in obj){
-      if(i != 'invitation_user' && i != 'pay_order'){
+      if(i != 'invitation_user' && i != 'pay_order' && i != 'feedback_material'){
         str += `${i}=${obj[i]}&`
       }
     }

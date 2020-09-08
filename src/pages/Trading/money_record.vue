@@ -6,13 +6,13 @@
 					<el-input v-model="req.batch_no" placeholder="请输入"></el-input>
 				</el-form-item>
 				<el-form-item label="批次状态：">
-					<el-select v-model="req.batch_status" placeholder="不限" clearable>
+					<el-select v-model="req.batch_status" placeholder="不限">
 						<el-option v-for="item in order_status" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="打款通道：">
-					<el-select v-model="req.pay_method" placeholder="不限" clearable>
+					<el-select v-model="req.pay_method" placeholder="不限">
 						<el-option v-for="item in channel_list" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
@@ -53,7 +53,7 @@
 			</el-table-column>
 			<el-table-column fixed="right" label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="setting(scope.row.batch_id,scope.row.status)" v-if="dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.detail == 1)">详情</el-button>
+					<el-button type="text" size="small" @click="setting(scope.row.batch_id,scope.row.status)" v-if="scope.row.status != 5 && (dataObj.is_supper == 1 || (dataObj.is_supper == 0 && dataObj.button_list.detail == 1))">详情</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -84,7 +84,7 @@
 					page:1,
 					pagesize:10,
 					batch_no:"",
-					batch_status:"0",
+					batch_status:"-1",
 					pay_method:"0",
 					created_time_start:"",
 					created_time_end:"",	
@@ -101,6 +101,9 @@
 					name:"支付宝"
 				}],					//打款通道
 				order_status:[{
+					id:"-1",
+					name:"不限"
+				},{
 					id:"0",
 					name:"待锁定"
 				},{
@@ -153,7 +156,7 @@
 					page:1,
 					pagesize:10,
 					batch_no:"",
-					batch_status:"0",
+					batch_status:"-1",
 					pay_method:"0",
 					created_time_start:"",
 					created_time_end:"",

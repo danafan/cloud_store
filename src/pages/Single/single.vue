@@ -30,13 +30,13 @@
 				<el-input v-model="req.adjust_id" placeholder="请输入"></el-input>
 			</el-form-item>
 			<el-form-item label="状态：">
-				<el-select v-model="req.feedback_status" placeholder="不限" clearable>
+				<el-select v-model="req.feedback_status" placeholder="不限">
 					<el-option v-for="item in feedback_list" :key="item.id" :label="item.name" :value="item.id">
 					</el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item label="审核结论：">
-				<el-select v-model="req.audit_status" placeholder="不限" clearable>
+				<el-select v-model="req.audit_status" placeholder="不限">
 					<el-option v-for="item in audit_list" :key="item.id" :label="item.name" :value="item.id">
 					</el-option>
 				</el-select>
@@ -103,7 +103,7 @@
 		<el-form-item label="反馈说明" label-width="130px" required>
 			<el-input v-model="feedbackReq.feedback_desc"></el-input>
 		</el-form-item>
-		<el-form-item label="反馈说明" label-width="130px" required>
+		<el-form-item label="反馈材料" label-width="130px" required>
 			<div class="showimg" v-if="feedbackReq.feedback_material" @mouseenter="isDel = true" @mouseleave="isDel = false">
 				<img class="img" :src="feekback_img">
 				<div class="modal" v-if="isDel == true">
@@ -135,16 +135,8 @@
 	width: 200px;
 	height: 200px;
 	.img{
-		border:1px solid #D9D9D9;
-		position: absolute;
 		width: 100%;
 		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 12px;
-		padding-right: 20px;
-		padding-left: 20px;
 	}
 	.modal{
 		background: rgba(0,0,0,.6);
@@ -179,8 +171,8 @@
 					order_id:"",
 					name:"",
 					adjust_id:"",
-					feedback_status:"",
-					audit_status:""
+					feedback_status:"-1",
+					audit_status:"-1"
 				},				//请求参数
 				feedback_list:[
 				{
@@ -260,8 +252,8 @@
 					order_id:"",
 					name:"",
 					adjust_id:"",
-					feedback_status:"",
-					audit_status:""
+					feedback_status:"-1",
+					audit_status:"-1"
 				}
 			},
 			//分页
@@ -277,14 +269,18 @@
 			},
 			//上传文件
 			callbackFn(obj){
-				this.feedbackReq.feedback_material = obj;				//传递到后台的银行卡图片对象
-				let fr = new FileReader();
-				let _this = this;
-				fr.onload = function(){
+				if(obj.type != 'image/png'){
+					this.$message.warning("反馈材料请上传图片！")
+				}else{
+					this.feedbackReq.feedback_material = obj;				//传递到后台的银行卡图片对象
+					let fr = new FileReader();
+					let _this = this;
+					fr.onload = function(){
 					_this.feekback_img = this.result;//预览的银行卡图片地址
 				};
 				fr.readAsDataURL(obj);
-			},
+			}
+		},
 			//删除文件
 			detele(){
 				this.feekback_img = "";

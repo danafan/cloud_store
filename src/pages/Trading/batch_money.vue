@@ -177,7 +177,7 @@
 							<span>{{scope.row.order_status1 | orderStatus(order_status)}}</span>
 							<div style="color: red" v-if="scope.row.order_status1 == 2">{{scope.row.order_status2 | orderStatus2}}</div>
 							<div style="color: red" v-if="scope.row.order_status1 == 3">{{scope.row.order_status2 | orderStatus3}}</div>
-							<div style="color: red" v-if="scope.row.order_status1 == 2 || scope.row.order_status1 == 3">{{scope.row.status_desc}}</div>
+							<div style="color: red" v-if="(scope.row.order_status1 == 2 || scope.row.order_status1 == 3) && scope.row.order_status2 == 1">{{scope.row.status_desc}}</div>
 						</template>
 					</el-table-column>
 					<el-table-column fixed="right" label="操作" align="center">
@@ -210,10 +210,10 @@
 				<el-input v-model="updateInfoReq.name"></el-input>
 			</el-form-item>
 			<el-form-item label="收款账号" label-width="180px" required>
-				<el-input v-model="updateInfoReq.id_card_no"></el-input>
+				<el-input v-model="updateInfoReq.bank_card_no"></el-input>
 			</el-form-item>
 			<el-form-item label="证件号码" label-width="180px" required>
-				<el-input v-model="updateInfoReq.bank_card_no"></el-input>
+				<el-input v-model="updateInfoReq.id_card_no"></el-input>
 			</el-form-item>
 		</el-form>
 		<div slot="footer" class="dialog-footer">
@@ -502,6 +502,7 @@
 				showPay:false,
 				pay_password:"",		//支付密码
 				order_id:"",
+				batch_id:""
 			}
 		},
 		created(){
@@ -512,7 +513,7 @@
 		},
 		watch:{
 			current_step:function(n,o){
-				if(n == 2){
+				if(n != 1){
 					//获取第二步信息
 					this.batchInfo();
 					//批次订单列表（下面）
@@ -554,6 +555,7 @@
 					resource.importFile(req).then(res => {
 						if(res.data.code == 1){
 							this.orderReq.batch_id = res.data.data;
+							this.batch_id = res.data.data;
 							this.current_step = this.current_step + 1;
 						}else{
 							this.$message.warning(res.data.msg);
@@ -591,7 +593,18 @@
 					resource.lockBatch({batch_id:this.orderReq.batch_id}).then(res => {
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
-							this.current_step = this.current_step + 2;
+							this.current_step = this.current_step + 1;
+							this.orderReq = {
+								page:1,
+								pagesize:10,
+								name:"",
+								phone:"",
+								batch_id:this.batch_id,
+								id_card_no:"",
+								order_status:"0",
+							};						
+							//批次订单列表（下面）
+							this.batchOrderList();
 						}else{
 							this.$message.warning(res.data.msg);
 						}
@@ -646,7 +659,8 @@
 			},
 			//搜索
 			search(){
-				console.log(this.orderReq);
+				//批次订单列表（下面）
+				this.batchOrderList();
 			},
 			//导出
 			exportFile(){
@@ -654,14 +668,12 @@
 			},
 			//重置(第二步)
 			reset(){
-				this.orderReq = {
-					page:1,
-					pagesize:10,
-					name:"",
-					phone:"",
-					id_card_no:"",
-					order_status:"0",
-				}
+				this.orderReq.page = 1;
+				this.orderReq.pagesize = 10;
+				this.orderReq.name = "";
+				this.orderReq.phone = "";
+				this.orderReq.id_card_no = "";
+				this.orderReq.order_status = "";
 			},
 			//分页
 			handleSizeChange(val) {
@@ -678,7 +690,7 @@
 			judgeQu(item){
 				if(item.order_status1 == 1){
 					return true;
-				}else if(item.order_status1 == 2 && item.order_status2 == 5 && item.batch_status == 0){
+				}else if(item.order_status1 == 3 && item.order_status2 == 5 && item.batch_status == 0){
 					return true;
 				}else if(item.order_status1 == 3 && item.order_status2 == 2 && item.batch_status == 0){
 					return true;
@@ -704,7 +716,7 @@
 			},
 			//详情
 			judgeDetail(item){
-				if(item.order_status1 == 2 || item.order_status1 == 6 && item.order_status1 == 8){
+				if(item.order_status1 == 8 && item.batch_status == 0){
 					return true;
 				}else{
 					return false;
@@ -802,7 +814,7 @@
 			orderStatus2:function(v){
 				switch(v){
 					case 1:
-					return '信息不匹配(锁批前可确定)'
+					return '信息不匹配'
 					case 2:
 					return '全网单人月累计打款金额超限制'
 					case 3:
@@ -818,7 +830,7 @@
 			orderStatus3:function(v){
 				switch(v){
 					case 1:
-					return '信息不匹配(锁批前可确定)'
+					return '信息不匹配'
 					case 2:
 					return '全网单人月累计打款金额超限制'
 					case 3:

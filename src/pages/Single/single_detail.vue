@@ -41,7 +41,7 @@
 				<div>反馈时间：{{dataObj.feedback_time}}</div>
 				<div>反馈说明：{{dataObj.feedback_desc}}</div>
 				<div class="file">反馈材料：
-					<img :src="dataObj.feedback_material">
+					<img :src="dataObj.feedback_material" v-if="dataObj.feedback_material != ''">
 				</div>
 			</div>
 		</el-card>
@@ -71,7 +71,6 @@
 	.file{
 		display: flex;
 		img{
-			border:1px solid red;
 			width: 120px;
 			height: 120px;
 		}
