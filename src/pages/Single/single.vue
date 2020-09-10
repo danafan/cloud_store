@@ -269,8 +269,8 @@
 			},
 			//上传文件
 			callbackFn(obj){
-				if(obj.type != 'image/png'){
-					this.$message.warning("反馈材料请上传图片！")
+				if(obj.type != 'image/png' && obj.type != 'image/jpeg'){
+					this.$message.warning("反馈材料只能是图片格式！")
 				}else{
 					this.feedbackReq.feedback_material = obj;				//传递到后台的银行卡图片对象
 					let fr = new FileReader();
@@ -333,6 +333,7 @@
 					resource.feedback(this.feedbackReq).then(res => {
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
+							this.showFeedback = false;
 							//获取列表
 							this.getList();
 						}else{

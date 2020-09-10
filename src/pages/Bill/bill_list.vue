@@ -38,7 +38,7 @@
 		<el-table :data="dataObj.data" border style="width: 100%" :header-cell-style="{'background':'#f4f4f4'}">
 			<el-table-column width="180" prop="bill_id" label="账单编号" align="center">
 			</el-table-column>
-			<el-table-column width="180" prop="add_time" label="账单日期" align="center">
+			<el-table-column width="180" prop="bill_date" label="账单日期" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="biil_money" label="账单金额（元）" align="center">
 			</el-table-column>

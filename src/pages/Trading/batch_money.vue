@@ -109,7 +109,7 @@
 							<div class="contents">
 								<div class="conttent_item">
 									<div>付款金额（元）</div>
-									<div>{{batch_info.prepay_order_money}}</div>
+									<div>{{batch_info.prepay_order_money + batch_info.prepay_order_service}}</div>
 								</div>
 								<div class="conttent_item">
 									<div>待打款金额（元）</div>
@@ -134,7 +134,7 @@
 						<el-input v-model="orderReq.id_card_no" placeholder="请输入"></el-input>
 					</el-form-item>
 					<el-form-item label="订单状态：">
-						<el-select v-model="orderReq.order_status" placeholder="不限" clearable>
+						<el-select v-model="orderReq.order_status" placeholder="不限">
 							<el-option v-for="item in order_status" :key="item.id" :label="item.name" :value="item.id">
 							</el-option>
 						</el-select>
@@ -594,17 +594,12 @@
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
 							this.current_step = this.current_step + 1;
-							this.orderReq = {
-								page:1,
-								pagesize:10,
-								name:"",
-								phone:"",
-								batch_id:this.batch_id,
-								id_card_no:"",
-								order_status:"0",
-							};						
-							//批次订单列表（下面）
-							this.batchOrderList();
+							this.orderReq.page = 1;
+							this.orderReq.pagesize = 10;
+							this.orderReq.name = "";
+							this.orderReq.phone = "";
+							this.orderReq.id_card_no = "";
+							this.orderReq.order_status = "0";
 						}else{
 							this.$message.warning(res.data.msg);
 						}
@@ -628,7 +623,7 @@
 					resource.pay(req).then(res => {
 						if(res.data.code == 1){
 							this.$message.success(res.data.msg);
-							this.$router.push('/money_detail');
+							this.$router.push('/money_detail?batch_id=' + this.orderReq.batch_id);
 						}else{
 							this.$message.warning(res.data.msg);
 						}
@@ -820,7 +815,7 @@
 					case 3:
 					return '收款人疑似企业（含关联企业）董监高或内部员工'
 					case 4:
-					return '收款人的姓名、手机号与管理员或登陆人的姓名、手机号相同'
+					return '收款人疑似企业（含关联企业）董监高或内部员工'
 					case 5:
 					return '未签约'
 					case 6:
@@ -836,7 +831,7 @@
 					case 3:
 					return '收款人疑似企业（含关联企业）董监高或内部员工'
 					case 4:
-					return '打款订单的姓名、手机号与管理员或登陆人的姓名、手机号相同'
+					return '收款人疑似企业（含关联企业）董监高或内部员工'
 					case 5:
 					return '未签约'
 				}

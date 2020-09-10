@@ -36,7 +36,7 @@ let path = {
 	serviceChargeRecord:'storebill/servicechargerecord',		//服务费记录
 	accountChange:'storebill/accountchange',					//资金流水
 	daybillIndex:'daybill/index',								//余额日账单表
-	billOrderList:'daybill/orderlist',							//余额日账单详情
+	billOrderList:'daybill/getorderList',							//余额日账单详情
 	getBillInfo:'daybill/getinfo',								//余额日账单详情（顶部）
 	billlist:'invoice/billlist',								//发票申请账单列表
 	applyList:'invoice/applylist',								//发票申请记录

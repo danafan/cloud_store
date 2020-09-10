@@ -30,13 +30,13 @@
 			</el-table-column>
 			<el-table-column width="150" prop="store_success_alipay_money" label="支付宝成功订单金额（元）" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="total_success_money" label="用户成功收款总金额（元）" align="center">
+			<el-table-column width="150" prop="user_total_success_money" label="用户成功收款总金额（元）" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="user_success_bank_money" label="银行卡用户成功收款金额（元）" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="user_success_alipay_money" label="支付宝用户成功收款金额" align="center">
 			</el-table-column>
-			<el-table-column width="150" prop="store_refund_service_money" label="部分退款订单用户实收金额（元）" align="center">
+			<el-table-column width="150" prop="user_return_money" label="部分退款订单用户实收金额（元）" align="center">
 			</el-table-column>
 			<el-table-column width="150" prop="total_success_num" label="成功打款笔数" align="center">
 			</el-table-column>
